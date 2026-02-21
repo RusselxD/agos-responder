@@ -1,0 +1,31 @@
+import type { ReactNode } from "react";
+
+interface ContainerProps {
+    headerTitle: string;
+    headerSubtitle: string;
+    children: ReactNode;
+}
+
+export default function Container({
+    headerTitle,
+    headerSubtitle,
+    children,
+}: ContainerProps) {
+    return (
+        <div className="rounded-xl overflow-hidden px-5 py-10 relative custom-shadow bg-white">
+            <div className="h-1.5 bg-primary absolute top-0 left-0 right-0"></div>
+
+            <div className="flex flex-col items-center">
+                <img src="/agos.svg" className="w-12 " />
+                <h2 className="text-[1.600rem] font-bold mt-4">
+                    {headerTitle}
+                </h2>
+                <p className="text-sm text-gray-500 mt-1 text-center">
+                    {headerSubtitle}
+                </p>
+            </div>
+
+            <div>{children}</div>
+        </div>
+    );
+}

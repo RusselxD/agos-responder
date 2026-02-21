@@ -25,3 +25,23 @@ body {
         "Segoe UI Symbol",
         "Noto Color Emoji";
 }
+
+@layer components {
+    .btn-submit {
+        @apply w-full flex items-center justify-center gap-3 rounded-xl py-3 transition-colors;
+        @apply bg-primary text-gray-100;
+        @apply active:bg-primary/90;
+        @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-primary;
+    }
+
+    .custom-shadow {
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    }
+
+    .spinner {
+        @apply border-[3px] border-solid border-transparent;
+        @apply border-t-current border-r-current;
+        @apply rounded-full;
+        @apply animate-spin;
+    }
+}
