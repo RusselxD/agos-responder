@@ -8,30 +8,18 @@ interface InstalledGuardProps {
 }
 
 export default function InstalledGuard({ children }: InstalledGuardProps) {
-    const [installed, setInstalled] = useState<boolean | null>(null);
+    const [installed, setInstalled] = useState<boolean>(() => isPwaInstalled());
     const location = useLocation();
 
     useEffect(() => {
-        const updateInstalled = () => {
-            setInstalled(isPwaInstalled());
-        };
-
-        // Initial check
-        updateInstalled();
-
         // React to display-mode changes (e.g. user installs while on page)
         const mediaQuery = window.matchMedia(
             "(display-mode: standalone), (display-mode: fullscreen), (display-mode: minimal-ui)",
         );
-        const handler = () => updateInstalled();
+        const handler = () => setInstalled(isPwaInstalled());
         mediaQuery.addEventListener("change", handler);
-
         return () => mediaQuery.removeEventListener("change", handler);
     }, []);
-
-    if (installed === null) {
-        return null;
-    }
 
     if (!installed) {
         return <Navigate to="/install" state={{ from: location }} replace />;
