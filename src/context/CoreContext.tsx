@@ -38,6 +38,7 @@ export function CoreProvider({ children }: { children: ReactNode }) {
         [responderId, responder],
     );
 
+    console.log(responder);
     return (
         <CoreContext.Provider value={contextValue}>
             {children}

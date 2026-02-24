@@ -44,4 +44,14 @@ body {
         @apply rounded-full;
         @apply animate-spin;
     }
+
+    .pulse-circle {
+        @apply relative;
+    }
+
+    .pulse-circle::after {
+        @apply content-[''] absolute inset-0 rounded-full;
+        @apply bg-inherit;
+        @apply animate-[pulse-out_1.5s_ease-out_infinite];
+    }
 }

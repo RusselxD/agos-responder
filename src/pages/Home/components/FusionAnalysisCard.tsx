@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { useFusionAnalysis } from "../../../context/FusionAnalysisContext";
 import { getMostRecentDate, getTimeAgo } from "../../../lib/utils/formatter";
+import Card from "./common/Card";
 
 interface TierConfig {
     [key: string]: TierDetails;
@@ -21,25 +22,25 @@ interface TierDetails {
 const tierConfig: TierConfig = {
     normal: {
         color: "text-emerald-600",
-        bgColor: "bg-emerald-50",
+        bgColor: "!bg-emerald-50",
         borderColor: "border-emerald-300",
         icon: CheckCircle,
     },
     warning: {
         color: "text-yellow-600",
-        bgColor: "bg-yellow-50",
+        bgColor: "!bg-yellow-50",
         borderColor: "border-yellow-400",
         icon: AlertTriangle,
     },
     critical: {
         color: "text-red-600",
-        bgColor: "bg-red-50",
+        bgColor: "!bg-red-50",
         borderColor: "border-red-400",
         icon: AlertCircle,
     },
     "n/a": {
         color: "text-gray-600",
-        bgColor: "bg-gray-50",
+        bgColor: "!bg-gray-50",
         borderColor: "border-gray-300",
         icon: CheckCircle,
     },
@@ -57,7 +58,7 @@ const TimeAgoDisplay = () => {
     );
 
     return (
-        <p className="text-gray-600 text-xs absolute bottom-1 left-2">
+        <p className="text-gray-600 text-xs absolute bottom-2 left-2.5">
             {getTimeAgo(mostRecent)}
         </p>
     );
@@ -82,21 +83,25 @@ const TriggeredConditionlist = ({
 };
 
 export default function FusionAnalysisCard() {
-    const { fusionAnalysis } = useFusionAnalysis();
+    const { fusionAnalysis, error } = useFusionAnalysis();
 
     const tier =
         tierConfig[
             fusionAnalysis?.fusion_data.alert_name.toLowerCase() || "n/a"
         ] || tierConfig["n/a"];
 
+    if (error) {
+        return null;
+    }
+
     return (
-        <div
-            className={`${tier.bgColor} ${tier.borderColor} border-l-4 rounded-lg px-3 p-4 pb-8 relative`}
+        <Card
+            className={`${tier.bgColor} ${tier.borderColor} border-l-4 pb-8 py-4 relative`}
         >
             <div className="flex gap-3">
                 <tier.icon className={`w-8 h-8 ${tier.color}`} />
-                <div>
-                    <span className={`font-medium ${tier.color}`}>
+                <div className="space-y-1">
+                    <span className={`font-semibold ${tier.color}`}>
                         {fusionAnalysis?.fusion_data.alert_name || "N/A"}
                     </span>
 
@@ -107,8 +112,7 @@ export default function FusionAnalysisCard() {
                     />
                 </div>
             </div>
-
             <TimeAgoDisplay />
-        </div>
+        </Card>
     );
 }
