@@ -5,7 +5,7 @@ import WeatherConditionCard from "./components/WeatherConditionCard/WeatherCondi
 
 export default function Home() {
     return (
-        <div className="p-4 space-y-3">
+        <div className="p-4 space-y-3 pb-24">
             <FusionAnalysisCard />
             <BlockageStatusCard />
             <WaterLevelStatusCard />
