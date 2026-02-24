@@ -5,6 +5,7 @@ import { CoreProvider } from "../context/CoreContext";
 import { FusionAnalysisProvider } from "../context/FusionAnalysisContext";
 import { BlockageProvider } from "../context/BlockageContext";
 import { WaterLevelProvider } from "../context/WaterLevelContext";
+import AppHeader from "../components/AppHeader";
 
 export default function MainLayout() {
     return (
@@ -14,7 +15,8 @@ export default function MainLayout() {
                     <BlockageProvider>
                         <WaterLevelProvider>
                             <div>
-                                <div className="min-h-[100dvh] bg-background">
+                                <AppHeader />
+                                <div className="min-h-[100dvh] bg-background pt-16">
                                     <Outlet />
                                 </div>
                                 <BottomNav />

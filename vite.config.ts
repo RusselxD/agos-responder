@@ -17,7 +17,7 @@ export default defineConfig({
             manifest: {
                 name: "AGOS",
                 short_name: "AGOS",
-                display: "fullscreen",
+                display: "standalone",
                 background_color: "#ffffff",
                 theme_color: "#ffffff",
                 icons: [
