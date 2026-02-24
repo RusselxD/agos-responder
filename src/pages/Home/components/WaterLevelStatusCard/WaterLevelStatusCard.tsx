@@ -1,4 +1,4 @@
-import Card from "../common/Card";
+import Card from "../../../../components/common/Card";
 import MainDisplay from "./components/MainDisplay";
 import MetricCards from "./components/MetricCards";
 import "./style.css";

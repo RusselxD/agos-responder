@@ -1,3 +1,4 @@
+import Page from "../../components/common/Page";
 import BlockageStatusCard from "./components/BlockageStatusCard";
 import FusionAnalysisCard from "./components/FusionAnalysisCard";
 import WaterLevelStatusCard from "./components/WaterLevelStatusCard/WaterLevelStatusCard";
@@ -5,11 +6,11 @@ import WeatherConditionCard from "./components/WeatherConditionCard/WeatherCondi
 
 export default function Home() {
     return (
-        <div className="p-4 space-y-3 pb-24">
+        <Page>
             <FusionAnalysisCard />
             <BlockageStatusCard />
             <WaterLevelStatusCard />
             <WeatherConditionCard />
-        </div>
+        </Page>
     );
 }

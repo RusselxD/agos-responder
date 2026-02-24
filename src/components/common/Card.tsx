@@ -10,7 +10,7 @@ type Props = {
 export default function Card({ children, headerTitle, className }: Props) {
     return (
         <div
-            className={`rounded-lg bg-white custom-shadow px-4 py-5 ${className || ""}`}
+            className={`rounded-xl bg-white custom-shadow px-4 py-5 ${className || ""}`}
         >
             {headerTitle && <CardTitle title={headerTitle} />}
             {children}

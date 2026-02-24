@@ -22,7 +22,7 @@ const tabs: Tab[] = [
     },
     {
         name: "Profile",
-        path: "/profile",
+        path: "/me",
         icon: User,
     },
 ];

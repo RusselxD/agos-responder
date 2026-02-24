@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useWeather } from "../../../../context/WeatherContext";
 import { getTimeAgo } from "../../../../lib/utils/formatter";
 import type { WeatherData } from "../../../../types/weather";
-import Card from "../common/Card";
+import Card from "../../../../components/common/Card";
 
 type WeatherProps = {
     weather: WeatherData;

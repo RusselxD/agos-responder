@@ -1,4 +1,4 @@
-import Card from "./common/Card";
+import Card from "../../../components/common/Card";
 
 import { useWaterwayContext } from "../../../context/BlockageContext";
 import type { Status } from "../../../types/blockage";

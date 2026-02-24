@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 import { useFusionAnalysis } from "../../../context/FusionAnalysisContext";
 import { getMostRecentDate, getTimeAgo } from "../../../lib/utils/formatter";
-import Card from "./common/Card";
+import Card from "../../../components/common/Card";
 
 interface TierConfig {
     [key: string]: TierDetails;

@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import AuthGuard from "./guards/AuthGuard";
 import MainLayout from "./layouts/MainLayout";
 import InstalledGuard from "./guards/InstalledGuard";
+import Profile from "./pages/Profile";
 
 export const router = createBrowserRouter([
     {
@@ -28,6 +29,10 @@ export const router = createBrowserRouter([
             {
                 path: "/home",
                 element: <Home />,
+            },
+            {
+                path: "/me",
+                element: <Profile />,
             },
         ],
     },
