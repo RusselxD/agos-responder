@@ -9,3 +9,10 @@ export interface Responder {
     createdAt: string;
     activatedAt: string;
 }
+
+export interface NotificationPreferences {
+    warning: boolean;
+    critical: boolean;
+    blockage: boolean;
+    announcement: boolean;
+}
