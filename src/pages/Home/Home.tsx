@@ -1,6 +1,7 @@
 import BlockageStatusCard from "./components/BlockageStatusCard";
 import FusionAnalysisCard from "./components/FusionAnalysisCard";
 import WaterLevelStatusCard from "./components/WaterLevelStatusCard/WaterLevelStatusCard";
+import WeatherConditionCard from "./components/WeatherConditionCard/WeatherConditionCard";
 
 export default function Home() {
     return (
@@ -8,6 +9,7 @@ export default function Home() {
             <FusionAnalysisCard />
             <BlockageStatusCard />
             <WaterLevelStatusCard />
+            <WeatherConditionCard />
         </div>
     );
 }

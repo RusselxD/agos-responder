@@ -6,6 +6,7 @@ import { FusionAnalysisProvider } from "../context/FusionAnalysisContext";
 import { BlockageProvider } from "../context/BlockageContext";
 import { WaterLevelProvider } from "../context/WaterLevelContext";
 import AppHeader from "../components/AppHeader";
+import { WeatherProvider } from "../context/WeatherContext";
 
 export default function MainLayout() {
     return (
@@ -14,13 +15,15 @@ export default function MainLayout() {
                 <FusionAnalysisProvider>
                     <BlockageProvider>
                         <WaterLevelProvider>
-                            <div>
-                                <AppHeader />
-                                <div className="min-h-[100dvh] bg-background pt-16">
-                                    <Outlet />
+                            <WeatherProvider>
+                                <div>
+                                    <AppHeader />
+                                    <div className="min-h-[100dvh] bg-background pt-16">
+                                        <Outlet />
+                                    </div>
+                                    <BottomNav />
                                 </div>
-                                <BottomNav />
-                            </div>
+                            </WeatherProvider>
                         </WaterLevelProvider>
                     </BlockageProvider>
                 </FusionAnalysisProvider>

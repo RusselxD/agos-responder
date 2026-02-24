@@ -149,7 +149,7 @@ export default function MainDisplay() {
                 </div>
             </div>
             <span className="text-[0.800rem] text-gray-900">
-                {`Updated ${getTimeAgo(sensorData?.timestamp || "")}`}
+                {getTimeAgo(sensorData?.timestamp || "")}
             </span>
         </div>
     );

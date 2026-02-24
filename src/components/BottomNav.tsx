@@ -29,7 +29,7 @@ const tabs: Tab[] = [
 
 export default function BottomNav() {
     return (
-        <div className="fixed bottom-0 left-0 right-0 flex items-center justify-between pt-1 px-10 bg-white border-t border-gray-200">
+        <div className="fixed bottom-0 left-0 right-0 flex items-center justify-between py-1 px-10 bg-white border-t border-gray-200">
             {tabs.map((tab, index) => {
                 return (
                     <NavLink

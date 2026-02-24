@@ -96,7 +96,7 @@ export default function FusionAnalysisCard() {
 
     return (
         <Card
-            className={`${tier.bgColor} ${tier.borderColor} border-l-4 pb-8 py-4 relative`}
+            className={`${tier.bgColor} ${tier.borderColor} border-l-4 !pb-8 !py-3 !pl-3 relative`}
         >
             <div className="flex gap-3">
                 <tier.icon className={`w-8 h-8 ${tier.color}`} />
