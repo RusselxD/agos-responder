@@ -21,6 +21,9 @@ export default defineConfig({
                 name: "AGOS",
                 short_name: "AGOS",
                 display: "standalone",
+                scope: "/",
+                start_url: "/",
+                id: "/",
                 background_color: "#ffffff",
                 theme_color: "#ffffff",
                 icons: [
