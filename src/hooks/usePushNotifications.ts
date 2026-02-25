@@ -31,11 +31,16 @@ export function usePushNotifications() {
 
             // 4. get vapid public key from backend
             const { data } = await apiClient.get("/push/vapid-public-key");
+            const publicKey = data.publicKey ?? data.public_key;
+            if (!publicKey || typeof publicKey !== "string") {
+                console.error("Push: missing VAPID public key from API");
+                return;
+            }
 
             // 5. subscribe
             const subscription = await sw.pushManager.subscribe({
                 userVisibleOnly: true,
-                applicationServerKey: urlBase64ToUint8Array(data.public_key),
+                applicationServerKey: urlBase64ToUint8Array(publicKey),
             });
 
             // 6. save subscription to backend
