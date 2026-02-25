@@ -7,12 +7,15 @@ export default defineConfig({
         react(),
         VitePWA({
             registerType: "autoUpdate",
+            strategies: "injectManifest",
+            srcDir: "public",
+            filename: "sw.js",
             devOptions: {
                 enabled: true,
             },
-            workbox: {
-                maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3 MiB
+            injectManifest: {
                 globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
+                maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3 MiB
             },
             manifest: {
                 name: "AGOS",
