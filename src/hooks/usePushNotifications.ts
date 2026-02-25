@@ -13,10 +13,12 @@ function urlBase64ToUint8Array(base64String: string) {
 }
 
 export function usePushNotifications() {
-    const { responder } = useCoreHook();
+    const { responderId } = useCoreHook();
 
     useEffect(() => {
         const subscribe = async () => {
+            if (!responderId) return;
+
             // 1. check browser support
             if (!("serviceWorker" in navigator) || !("PushManager" in window))
                 return;
@@ -46,10 +48,10 @@ export function usePushNotifications() {
             // 6. save subscription to backend
             await apiClient.post("/push/subscribe", {
                 ...subscription.toJSON(),
-                responder_id: responder?.id,
+                responder_id: responderId,
             });
         };
 
         subscribe();
-    }, []); // runs once after login/mount
+    }, [responderId]);
 }
