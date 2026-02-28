@@ -21,13 +21,14 @@ export default function Alerts() {
         return <ErrorPage message={error} />;
     }
 
-    if (shownAlerts && shownAlerts.length === 0) {
-        return <EmptyPage isAllChosen={chosenFilter === "all"} />;
-    }
-
     return (
         <Page className="!space-y-2">
             <AlertTypeFilters />
+
+            {shownAlerts && shownAlerts.length === 0 && (
+                <EmptyPage isAllChosen={chosenFilter === "all"} />
+            )}
+
             {shownAlerts?.map((alert) => (
                 <AlertCard key={alert.id} alert={alert} />
             ))}
