@@ -53,7 +53,8 @@ const ToggleSection = ({
 export default function PushNotifications() {
     const [notifPreferences, setNotifPreferences] =
         useState<NotificationPreferences | null>(null);
-    const [isFetching, setIsFetching] = useState(true);
+    const [isFetching, setIsFetching] = useState<boolean>(true);
+    const [error, setError] = useState<string>("");
 
     const { responder } = useCoreHook();
 
@@ -68,6 +69,7 @@ export default function PushNotifications() {
                 );
                 setNotifPreferences(res);
             } catch (error) {
+                setError("Failed to fetch notification preferences");
                 console.log(error);
             } finally {
                 setIsFetching(false);
@@ -93,7 +95,11 @@ export default function PushNotifications() {
                 };
             });
 
-            await responderAPI.updateResponderNotifPreferences(responder.id, type, enabled);
+            await responderAPI.updateResponderNotifPreferences(
+                responder.id,
+                type,
+                enabled,
+            );
         } catch (error) {
             setNotifPreferences((prev) => {
                 if (!prev) return prev;
@@ -105,8 +111,23 @@ export default function PushNotifications() {
         }
     };
 
-    if (isFetching || !notifPreferences) {
-        return <div>wait lang</div>;
+    if (isFetching) {
+        return (
+            <div className="space-y-2">
+                <div className="skeleton h-12 w-full rounded-lg"></div>
+                <div className="skeleton h-12 w-full rounded-lg"></div>
+                <div className="skeleton h-12 w-full rounded-lg"></div>
+                <div className="skeleton h-12 w-full rounded-lg"></div>
+            </div>
+        );
+    }
+
+    if (error || !notifPreferences) {
+        return (
+            <div className="text-center bg-red-50 border border-red-500 py-4 rounded-lg">
+                <p className="text-red-500 font-medium">{error}</p>
+            </div>
+        );
     }
 
     return (

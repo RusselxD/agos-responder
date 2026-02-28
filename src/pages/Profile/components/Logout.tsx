@@ -1,14 +1,20 @@
+import { LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
 export default function Logout() {
+    const navigate = useNavigate();
     const handleLogout = () => {
         localStorage.clear();
+        navigate("/verify");
     };
 
     return (
         <button
             onClick={handleLogout}
-            className="px-4 py-5 w-full rounded-xl bg-red-50 text-white font-semibold border-2 border-red-200"
+            className="px-4 py-3 w-full active:bg-red-50 transition-colors rounded-xl bg-white text-red-500 font-medium border-2 border-red-300 flex items-center gap-2 justify-center"
         >
-            Logout
+            <LogOut className="w-6 h-6" />
+            <span>Logout</span>
         </button>
     );
 }

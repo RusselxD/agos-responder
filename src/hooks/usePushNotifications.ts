@@ -1,4 +1,3 @@
-// usePushNotifications.js
 import { useEffect } from "react";
 import apiClient from "../lib/api/axiosConfig";
 import { useCoreHook } from "../context/CoreContext";
