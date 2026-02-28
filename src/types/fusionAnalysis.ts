@@ -36,10 +36,3 @@ interface WeatherStatus extends StatusBase {
     precipitation_mm: number;
     weather_condition: string;
 }
-
-export interface AlertThresholds {
-    tier_1_max: number;
-    tier_2_min: number;
-    tier_2_max: number;
-    tier_3_min: number;
-}

@@ -20,7 +20,7 @@ export default function MainLayout() {
                                 <NotificationProvider>
                                     <div>
                                         <AppHeader />
-                                        <div className="min-h-[100dvh] bg-background py-16">
+                                        <div className="min-h-[100dvh] bg-background pt-14 pb-16">
                                             <Outlet />
                                         </div>
                                         <BottomNav />

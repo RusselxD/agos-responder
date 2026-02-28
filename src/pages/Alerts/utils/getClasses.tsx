@@ -5,13 +5,13 @@ import { TriangleAlert, CircleAlert, Ban, Megaphone } from "lucide-react";
 export const getIcon = (type: NotificationType): ReactElement | null => {
     switch (type) {
         case "critical":
-            return <TriangleAlert className="text-red-600 w-4 h-4" />;
+            return <TriangleAlert className="w-4 h-4" />;
         case "warning":
-            return <CircleAlert className="text-yellow-600 w-4 h-4" />;
+            return <CircleAlert className="w-4 h-4" />;
         case "blockage":
-            return <Ban className="text-gray-600 w-4 h-4" />;
+            return <Ban className="w-4 h-4" />;
         case "announcement":
-            return <Megaphone className="text-blue-600 w-4 h-4" />;
+            return <Megaphone className="w-4 h-4" />;
         default:
             return null;
     }
@@ -20,13 +20,13 @@ export const getIcon = (type: NotificationType): ReactElement | null => {
 export const getBadgeColor = (type: NotificationType): string => {
     switch (type) {
         case "critical":
-            return "bg-red-100 text-red-800";
+            return "bg-red-100 text-red-800 border-red-400";
         case "warning":
-            return "bg-yellow-100 text-yellow-800";
+            return "bg-yellow-100 text-yellow-800 border-yellow-400";
         case "blockage":
-            return "bg-gray-100 text-gray-800";
+            return "bg-gray-100 text-gray-800 border-gray-400";
         case "announcement":
-            return "bg-blue-100 text-blue-800";
+            return "bg-blue-100 text-blue-800 border-blue-400";
         default:
             return "";
     }
