@@ -85,6 +85,7 @@ export function AlertsPageProvider({ children }: { children: ReactNode }) {
         const updatedAlerts = alerts?.map((a) =>
             a.id === alertId ? updatedAlert : a,
         );
+        setChosenAlert(updatedAlert);
         setAlerts(updatedAlerts);
         setShownAlerts(updatedAlerts);
     };

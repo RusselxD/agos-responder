@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useCoreHook } from "../../../../../context/CoreContext";
 import { useAlertsPageHook } from "../../../context/AlertsPageContext";
 import { alertsAPI } from "../../../../../lib/api/alert";
+import { useNotificationHook } from "../../../../../context/NotificationContext";
 
 export const Header = ({
     type,
@@ -52,6 +53,7 @@ export const AcknowledgeNotification = () => {
 
     const { responderId } = useCoreHook();
     const { chosenAlert, acknowledgeAlert } = useAlertsPageHook();
+    const { reduceUnreadCount } = useNotificationHook();
 
     const handleSubmitAcknowledgement = async () => {
         try {
@@ -67,6 +69,7 @@ export const AcknowledgeNotification = () => {
                 res.acknowledgeMessage,
                 res.acknowledgedAt,
             );
+            reduceUnreadCount(1);
         } catch (error) {
             console.log(error);
         } finally {
