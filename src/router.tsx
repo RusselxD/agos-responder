@@ -11,6 +11,7 @@ import MainLayout from "./layouts/MainLayout";
 import InstalledGuard from "./guards/InstalledGuard";
 import Profile from "./pages/Profile";
 import Alerts from "./pages/Alerts";
+import { AlertsPageProvider } from "./pages/Alerts/context/AlertsPageContext";
 
 export const router = createBrowserRouter([
     {
@@ -33,7 +34,11 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/alerts",
-                element: <Alerts />,
+                element: (
+                    <AlertsPageProvider>
+                        <Alerts />
+                    </AlertsPageProvider>
+                ),
             },
             {
                 path: "/me",
