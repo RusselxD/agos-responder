@@ -7,6 +7,7 @@ import { BlockageProvider } from "../context/BlockageContext";
 import { WaterLevelProvider } from "../context/WaterLevelContext";
 import AppHeader from "../components/AppHeader";
 import { WeatherProvider } from "../context/WeatherContext";
+import { NotificationProvider } from "../context/NotificationContext";
 
 export default function MainLayout() {
     return (
@@ -16,13 +17,15 @@ export default function MainLayout() {
                     <BlockageProvider>
                         <WaterLevelProvider>
                             <WeatherProvider>
-                                <div>
-                                    <AppHeader />
-                                    <div className="min-h-[100dvh] bg-background pt-16">
-                                        <Outlet />
+                                <NotificationProvider>
+                                    <div>
+                                        <AppHeader />
+                                        <div className="min-h-[100dvh] bg-background py-16">
+                                            <Outlet />
+                                        </div>
+                                        <BottomNav />
                                     </div>
-                                    <BottomNav />
-                                </div>
+                                </NotificationProvider>
                             </WeatherProvider>
                         </WaterLevelProvider>
                     </BlockageProvider>
