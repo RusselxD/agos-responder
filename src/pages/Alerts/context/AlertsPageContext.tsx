@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import type { NotificationType, Alert } from "../../../types/alert";
 import { alertsAPI } from "../../../lib/api/alert";
+import { flushQueue } from "../../../lib/utils/offlineQueue";
 import { useCoreHook } from "../../../context/CoreContext";
 
 interface AlertsPageContextValue {
@@ -97,7 +98,7 @@ export function AlertsPageProvider({ children }: { children: ReactNode }) {
                 const res = await alertsAPI.getAlerts(responderId);
                 setAlerts(res);
                 setShownAlerts(res);
-            } catch (error) {
+            } catch {
                 setError("Failed to fetch alerts. Please try again.");
             } finally {
                 setIsFetching(false);
@@ -105,6 +106,24 @@ export function AlertsPageProvider({ children }: { children: ReactNode }) {
         };
 
         fetchAlerts();
+    }, []);
+
+    // Flush queued offline acknowledgements when back online
+    useEffect(() => {
+        const handleOnline = () => {
+            flushQueue().then((synced) => {
+                if (synced > 0) {
+                    console.log(`Synced ${synced} queued acknowledgement(s)`);
+                }
+            });
+        };
+
+        window.addEventListener("online", handleOnline);
+
+        // Also attempt on mount in case we're already online with pending items
+        if (navigator.onLine) handleOnline();
+
+        return () => window.removeEventListener("online", handleOnline);
     }, []);
 
     const contextValue = useMemo(

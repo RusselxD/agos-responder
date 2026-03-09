@@ -21,10 +21,10 @@ export default function AppHeader() {
     const { responder } = useCoreHook();
 
     return (
-        <div className="fixed z-50 -top-1 left-0 right-0 flex items-center justify-between bg-white custom-shadow pb-4 pt-5 px-4">
+        <div className="fixed z-50 -top-1 left-0 right-0 flex items-center justify-between bg-white dark:bg-slate-900 custom-shadow pb-4 pt-5 px-4">
             <div className="flex items-center gap-1">
                 <img src="/agos.svg" className="w-8" />
-                <p className="font-black text-xl text-primary">AGOS</p>
+                <p className="font-black text-xl text-primary dark:text-accent">AGOS</p>
             </div>
             <div className="flex items-center gap-1">
                 <MapPinFilled className="text-red-500" />

@@ -9,7 +9,9 @@ import { useState } from "react";
 import { useCoreHook } from "../../../../../context/CoreContext";
 import { useAlertsPageHook } from "../../../context/AlertsPageContext";
 import { alertsAPI } from "../../../../../lib/api/alert";
+import { enqueueAcknowledgement } from "../../../../../lib/utils/offlineQueue";
 import { useNotificationHook } from "../../../../../context/NotificationContext";
+import { useI18n } from "../../../../../context/I18nContext";
 
 export const Header = ({
     type,
@@ -37,9 +39,9 @@ export const NotificationDetails = ({
     timestamp: string;
 }) => {
     return (
-        <div className="bg-gray-100 p-3 rounded-xl flex flex-col gap-1.5">
+        <div className="bg-gray-100 dark:bg-slate-700 p-3 rounded-xl flex flex-col gap-1.5">
             <p className="text-sm">{message}</p>
-            <span className="text-[0.800rem] text-gray-500">
+            <span className="text-[0.800rem] text-gray-500 dark:text-gray-400">
                 {formatDate(timestamp)}
             </span>
         </div>
@@ -54,24 +56,41 @@ export const AcknowledgeNotification = () => {
     const { responderId } = useCoreHook();
     const { chosenAlert, acknowledgeAlert } = useAlertsPageHook();
     const { reduceUnreadCount } = useNotificationHook();
+    const { t } = useI18n();
 
     const handleSubmitAcknowledgement = async () => {
+        if (isSubmitting) return;
+
         try {
             setIsSubmitting(true);
-            const payload = {
+
+            const payload: AcknowledgeNotificationPayload = {
                 message: message || null,
                 responderId: responderId!,
                 deliveryId: chosenAlert!.id,
-            } as AcknowledgeNotificationPayload;
+            };
             const res = await alertsAPI.acknowledgeNotification(payload);
+
             acknowledgeAlert(
                 chosenAlert!.id,
                 res.acknowledgeMessage,
                 res.acknowledgedAt,
             );
             reduceUnreadCount(1);
-        } catch (error) {
-            console.log(error);
+        } catch {
+            // Queue for retry when back online
+            enqueueAcknowledgement({
+                message: message || null,
+                responderId: responderId!,
+                deliveryId: chosenAlert!.id,
+            });
+            // Optimistically mark as acknowledged locally
+            acknowledgeAlert(
+                chosenAlert!.id,
+                message || null,
+                new Date().toISOString(),
+            );
+            reduceUnreadCount(1);
         } finally {
             setIsSubmitting(false);
         }
@@ -79,22 +98,22 @@ export const AcknowledgeNotification = () => {
 
     return (
         <div className="flex flex-col gap-2">
-            <span className="text-[0.800rem] text-gray-700 -mb-1">
-                Leave a message (optional)
+            <span className="text-[0.800rem] text-gray-700 dark:text-gray-300 -mb-1">
+                {t("alerts.leaveMessage")}
             </span>
             <textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                className="text-sm p-2 border border-gray-400 rounded-lg resize-none outline-none focus:outline-none focus:ring-0 focus:border-gray-400"
+                className="text-sm p-2 border border-gray-400 dark:border-slate-600 rounded-lg resize-none outline-none focus:outline-none focus:ring-0 focus:border-gray-400 dark:focus:border-slate-500 bg-transparent"
                 rows={3}
-                placeholder="Enter optional acknowledgment message..."
+                placeholder={t("alerts.placeholder")}
             />
             <button
                 onClick={() => handleSubmitAcknowledgement()}
                 className="text-white bg-accent rounded-lg py-3 flex items-center justify-center gap-2"
             >
                 {isSubmitting && <div className="spinner w-4 h-4"></div>}
-                Acknowledge
+                {t("alerts.acknowledge")}
             </button>
         </div>
     );
@@ -107,12 +126,14 @@ export const AcknowledgementDetails = ({
     acknowledgeMessage: string | null;
     acknowledgedAt: string;
 }) => {
+    const { t } = useI18n();
+
     return (
         <div className="space-y-3">
-            <div className="bg-green-100 border border-green-500 p-2 rounded-lg text-green-700 text-sm flex gap-3 items-center">
+            <div className="bg-green-100 dark:bg-green-950/50 border border-green-500 dark:border-green-700 p-2 rounded-lg text-green-700 dark:text-green-400 text-sm flex gap-3 items-center">
                 <CircleCheck className="w-6 h-6" />
                 <div className="flex flex-col">
-                    <span className="text-sm font-medium">Acknowledged</span>
+                    <span className="text-sm font-medium">{t("alerts.acknowledged")}</span>
                     <span className="text-[0.800rem]">
                         {formatDate(acknowledgedAt)}
                     </span>
@@ -121,7 +142,7 @@ export const AcknowledgementDetails = ({
 
             {acknowledgeMessage && (
                 <div className="text-sm">
-                    <p className="text-gray-500 font-medium">NOTES</p>
+                    <p className="text-gray-500 dark:text-gray-400 font-medium">{t("alerts.notes")}</p>
                     <p>{acknowledgeMessage}</p>
                 </div>
             )}
@@ -145,7 +166,8 @@ export const AcknowledgeBadge = ({
 }: {
     isAcknowledged: boolean;
 }) => {
-    const message = isAcknowledged ? "ACKNOWLEDGED" : "PENDING ACKNOWLEDGEMENT";
+    const { t } = useI18n();
+    const message = isAcknowledged ? t("alerts.acknowledged").toUpperCase() : t("alerts.pendingAcknowledgement");
 
     return (
         <div className="flex items-center gap-2 text-[0.800rem] font-medium">

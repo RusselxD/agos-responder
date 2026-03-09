@@ -21,27 +21,27 @@ interface TierDetails {
 
 const tierConfig: TierConfig = {
     normal: {
-        color: "text-emerald-600",
-        bgColor: "!bg-emerald-50",
-        borderColor: "border-emerald-300",
+        color: "text-emerald-600 dark:text-emerald-400",
+        bgColor: "!bg-emerald-50 dark:!bg-emerald-950/50",
+        borderColor: "border-emerald-300 dark:border-emerald-700",
         icon: CheckCircle,
     },
     warning: {
-        color: "text-yellow-600",
-        bgColor: "!bg-yellow-50",
-        borderColor: "border-yellow-400",
+        color: "text-yellow-600 dark:text-yellow-400",
+        bgColor: "!bg-yellow-50 dark:!bg-yellow-950/50",
+        borderColor: "border-yellow-400 dark:border-yellow-700",
         icon: AlertTriangle,
     },
     critical: {
-        color: "text-red-600",
-        bgColor: "!bg-red-50",
-        borderColor: "border-red-400",
+        color: "text-red-600 dark:text-red-400",
+        bgColor: "!bg-red-50 dark:!bg-red-950/50",
+        borderColor: "border-red-400 dark:border-red-700",
         icon: AlertCircle,
     },
     "n/a": {
-        color: "text-gray-600",
-        bgColor: "!bg-gray-50",
-        borderColor: "border-gray-300",
+        color: "text-gray-600 dark:text-gray-400",
+        bgColor: "!bg-gray-50 dark:!bg-slate-800",
+        borderColor: "border-gray-300 dark:border-slate-600",
         icon: CheckCircle,
     },
 };
@@ -58,7 +58,7 @@ const TimeAgoDisplay = () => {
     );
 
     return (
-        <p className="text-gray-600 text-xs absolute bottom-2 left-2.5">
+        <p className="text-gray-600 dark:text-gray-400 text-xs absolute bottom-2 left-2.5">
             {getTimeAgo(mostRecent)}
         </p>
     );
@@ -74,7 +74,7 @@ const TriggeredConditionlist = ({
     return (
         <ul className="list-disc list-inside space-y-1">
             {conditions.map((condition, index) => (
-                <li key={index} className="text-[0.800rem] text-gray-700">
+                <li key={index} className="text-[0.800rem] text-gray-700 dark:text-gray-300">
                     {condition}
                 </li>
             ))}
@@ -83,7 +83,7 @@ const TriggeredConditionlist = ({
 };
 
 export default function FusionAnalysisCard() {
-    const { fusionAnalysis, error } = useFusionAnalysis();
+    const { fusionAnalysis, isFetching, error } = useFusionAnalysis();
 
     const tier =
         tierConfig[
@@ -92,6 +92,10 @@ export default function FusionAnalysisCard() {
 
     if (error) {
         return null;
+    }
+
+    if (isFetching && !fusionAnalysis) {
+        return <div className="skeleton h-24 w-full rounded-xl" />;
     }
 
     return (

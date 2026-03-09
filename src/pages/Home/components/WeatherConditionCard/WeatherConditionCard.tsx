@@ -3,6 +3,7 @@ import { useWeather } from "../../../../context/WeatherContext";
 import { getTimeAgo } from "../../../../lib/utils/formatter";
 import type { WeatherData } from "../../../../types/weather";
 import Card from "../../../../components/common/Card";
+import { useI18n } from "../../../../context/I18nContext";
 
 type WeatherProps = {
     weather: WeatherData;
@@ -16,7 +17,7 @@ const WeatherCondition = ({ weather }: WeatherProps) => {
                 <h2 className={`font-semibold text-2xl ${weather.color}`}>
                     {weather.condition}
                 </h2>
-                <p className="text-sm text-gray-600">{weather.description}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{weather.description}</p>
             </div>
         </div>
     );
@@ -28,12 +29,13 @@ const PrecipitationInfo = ({
     precipitation_mm: number;
 }) => {
     const { warning } = useWeather();
+    const { t } = useI18n();
 
     return (
         <div
-            className={`rounded-lg p-2.5 border ${warning ? "bg-amber-100 border-amber-300" : "bg-slate-100 border-gray-300"}`}
+            className={`rounded-lg p-2.5 border ${warning ? "bg-amber-100 border-amber-300 dark:bg-amber-950/50 dark:border-amber-700" : "bg-slate-100 border-gray-300 dark:bg-slate-700 dark:border-slate-600"}`}
         >
-            <p className="text-sm text-gray-500">Precipitation</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{t("home.precipitation")}</p>
             <p className="text-sm ">
                 <span>{`${precipitation_mm.toFixed(1)} mm/h`}</span>
             </p>
@@ -43,6 +45,7 @@ const PrecipitationInfo = ({
 
 const LastUpdatedInfo = ({ timestamp }: { timestamp: string }) => {
     const { warning } = useWeather();
+    const { t } = useI18n();
 
     const [timeAgo, setTimeAgo] = useState<string>(getTimeAgo(timestamp));
 
@@ -59,9 +62,9 @@ const LastUpdatedInfo = ({ timestamp }: { timestamp: string }) => {
 
     return (
         <div
-            className={`rounded-lg p-2.5 border ${warning ? "bg-amber-100 border-amber-300" : "bg-slate-100 border-gray-300"}`}
+            className={`rounded-lg p-2.5 border ${warning ? "bg-amber-100 border-amber-300 dark:bg-amber-950/50 dark:border-amber-700" : "bg-slate-100 border-gray-300 dark:bg-slate-700 dark:border-slate-600"}`}
         >
-            <p className="text-sm text-gray-500">Last Updated</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{t("home.lastUpdated")}</p>
             <p className="text-sm">{timeAgo}</p>
         </div>
     );
@@ -69,9 +72,10 @@ const LastUpdatedInfo = ({ timestamp }: { timestamp: string }) => {
 
 export default function WeatherConditionCard() {
     const { weatherData, isFetching, error } = useWeather();
+    const { t } = useI18n();
 
-    if (isFetching) {
-        return null;
+    if (isFetching && !weatherData) {
+        return <div className="skeleton h-40 w-full rounded-xl" />;
     }
 
     if (error) {
@@ -79,7 +83,7 @@ export default function WeatherConditionCard() {
     }
 
     return (
-        <Card headerTitle="WEATHER CONDITION" className="!p-3">
+        <Card headerTitle={t("home.weatherCondition")} className="!p-3">
             <WeatherCondition weather={weatherData!} />
             <div className="grid grid-cols-2 gap-2">
                 <PrecipitationInfo

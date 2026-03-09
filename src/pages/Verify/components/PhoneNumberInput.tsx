@@ -10,13 +10,13 @@ export default function PhoneNumberInput({
     onChange,
 }: PhoneNumberInputProps) {
     return (
-        <label className="flex items-center border border-gray-200 rounded-lg bg-gray-50 px-3 py-2.5">
-            <span className="text-gray-400 mr-2 border-r border-gray-400 pr-3 select-none">
+        <label className="flex items-center border border-gray-200 dark:border-slate-600 rounded-lg bg-gray-50 dark:bg-slate-700 px-3 py-2.5">
+            <span className="text-gray-400 dark:text-gray-500 mr-2 border-r border-gray-400 dark:border-slate-500 pr-3 select-none">
                 +63
             </span>
             <input
                 type="tel"
-                className="flex-1 bg-transparent outline-none border-none text-gray-900 placeholder-gray-400"
+                className="flex-1 bg-transparent outline-none border-none text-gray-900 dark:text-gray-100 placeholder-gray-400"
                 placeholder="9XX XXX XXXX"
                 maxLength={12}
                 inputMode="numeric"

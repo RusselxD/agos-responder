@@ -6,6 +6,7 @@ import PhoneNumberInput from "../components/PhoneNumberInput";
 import { verifyAPI } from "../../../lib/api/verify";
 import { useVerify } from "../context/VerifyPageContext";
 import { useNavigate } from "react-router-dom";
+import { useI18n } from "../../../context/I18nContext";
 
 export default function PhoneLookup() {
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -16,6 +17,7 @@ export default function PhoneLookup() {
 
     const { setResponderDetails } = useVerify();
     const navigate = useNavigate();
+    const { t } = useI18n();
 
     const handleInputNumber = (input: string) => {
         setError(null);
@@ -44,8 +46,8 @@ export default function PhoneLookup() {
 
     return (
         <Container
-            headerTitle="Activate Your Account"
-            headerSubtitle="Enter your registered mobile number to receive your access code"
+            headerTitle={t("verify.activateAccount")}
+            headerSubtitle={t("verify.activateSubtitle")}
         >
             {error && (
                 <p className="text-sm mt-3 text-red-600 bg-red-50 py-2 px-2 border border-red-500 rounded-md">
@@ -54,14 +56,14 @@ export default function PhoneLookup() {
             )}
             <div className="mt-5">
                 <p className="block text-sm font-medium text-gray-700 mb-1">
-                    Mobile Number
+                    {t("verify.mobileNumber")}
                 </p>
                 <PhoneNumberInput
                     value={phoneNumber}
                     onChange={handleInputNumber}
                 />
                 {normalizedPhoneNumber && (
-                    <span className="text-sm mt-1 text-gray-500 block">{`Full number: ${formatPHNumber(normalizedPhoneNumber)}`}</span>
+                    <span className="text-sm mt-1 text-gray-500 block">{`${t("verify.fullNumber")} ${formatPHNumber(normalizedPhoneNumber)}`}</span>
                 )}
                 <button
                     onClick={() => handleSubmit()}
@@ -69,7 +71,7 @@ export default function PhoneLookup() {
                     className="btn-submit mt-5"
                 >
                     {isSubmitting && <div className="spinner w-4 h-4" />}
-                    <span>Continue</span>
+                    <span>{t("verify.continue")}</span>
                 </button>
             </div>
         </Container>

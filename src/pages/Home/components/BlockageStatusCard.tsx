@@ -1,6 +1,7 @@
 import Card from "../../../components/common/Card";
 
 import { useWaterwayContext } from "../../../context/BlockageContext";
+import { useI18n } from "../../../context/I18nContext";
 import type { Status } from "../../../types/blockage";
 
 export const barColors = ["bg-clear", "bg-partial", "bg-blocked"];
@@ -52,6 +53,7 @@ const StatusText = () => {
 
 const ProgressBar = () => {
     const { status } = useWaterwayContext();
+    const { t } = useI18n();
     const barCount = getLevelCount(status);
 
     return (
@@ -63,22 +65,29 @@ const ProgressBar = () => {
                         className={`w-full rounded-md h-2 ${
                             barCount >= index
                                 ? barColors[barCount]
-                                : "bg-gray-200"
+                                : "bg-gray-200 dark:bg-slate-600"
                         }`}
                     ></span>
                 );
             })}
-            <div className="absolute bottom-0 flex items-center justify-between text-gray-500 text-sm w-full">
-                <span>Clear</span>
-                <span>Blocked</span>
+            <div className="absolute bottom-0 flex items-center justify-between text-gray-500 dark:text-gray-400 text-sm w-full">
+                <span>{t("home.clear")}</span>
+                <span>{t("home.blocked")}</span>
             </div>
         </div>
     );
 };
 
 export default function BlockageStatusCard() {
+    const { isFetching, status } = useWaterwayContext();
+    const { t } = useI18n();
+
+    if (isFetching && !status) {
+        return <div className="skeleton h-36 w-full rounded-xl" />;
+    }
+
     return (
-        <Card className="bg-white !p-3" headerTitle="BLOCKAGE STATUS">
+        <Card className="bg-white !p-3" headerTitle={t("home.blockageStatus")}>
             <div>
                 <StatusText />
                 <ProgressBar />

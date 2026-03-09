@@ -148,7 +148,7 @@ export default function MainDisplay() {
                     <LevelInfo />
                 </div>
             </div>
-            <span className="text-[0.800rem] text-gray-900">
+            <span className="text-[0.800rem] text-gray-900 dark:text-gray-300">
                 {getTimeAgo(sensorData?.timestamp || "")}
             </span>
         </div>

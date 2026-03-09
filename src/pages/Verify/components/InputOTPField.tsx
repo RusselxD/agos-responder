@@ -103,7 +103,7 @@ export default function InputOTPField({
                     inputMode="numeric"
                     autoComplete="one-time-code"
                     pattern="[0-9]*"
-                    className="w-12 h-14 text-center border-2 border-gray-300 text-xl font-semibold rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    className="w-12 h-14 text-center border-2 border-gray-300 dark:border-slate-600 bg-transparent text-xl font-semibold rounded-lg focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors disabled:bg-gray-100 dark:disabled:bg-slate-700 disabled:cursor-not-allowed"
                 />
             ))}
         </div>

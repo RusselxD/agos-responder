@@ -10,6 +10,7 @@ import SectionLabel from "./common/SectionLabel";
 import { useEffect, useState } from "react";
 import type { NotificationPreferences } from "../../../types/responder";
 import { useCoreHook } from "../../../context/CoreContext";
+import { useI18n } from "../../../context/I18nContext";
 import { responderAPI } from "../../../lib/api/responder";
 
 interface ToggleSectionProps {
@@ -29,7 +30,7 @@ const ToggleSection = ({
 }: ToggleSectionProps) => {
     return (
         <div
-            className={`flex py-4 px-4 items-center justify-between ${borderBottom ? "border-b border-gray-300" : ""}`}
+            className={`flex py-4 px-4 items-center justify-between ${borderBottom ? "border-b border-gray-300 dark:border-slate-600" : ""}`}
         >
             <div className="flex items-center gap-2">
                 <Icon className="w-6 h-6" />
@@ -40,7 +41,7 @@ const ToggleSection = ({
 
             <button
                 onClick={() => onToggle(!isActive)}
-                className={`rounded-full relative w-12 h-7 ${isActive ? "bg-accent/80" : "bg-gray-300"}`}
+                className={`rounded-full relative w-12 h-7 ${isActive ? "bg-accent/80" : "bg-gray-300 dark:bg-slate-600"}`}
             >
                 <span
                     className={`rounded-full aspect-square bg-white absolute top-1 bottom-1 ${isActive ? "left-6" : "left-1"}`}
@@ -57,6 +58,7 @@ export default function PushNotifications() {
     const [error, setError] = useState<string>("");
 
     const { responder } = useCoreHook();
+    const { t } = useI18n();
 
     useEffect(() => {
         const fetchPreferences = async () => {
@@ -69,7 +71,7 @@ export default function PushNotifications() {
                 );
                 setNotifPreferences(res);
             } catch (error) {
-                setError("Failed to fetch notification preferences");
+                setError(t("profile.prefError"));
                 console.log(error);
             } finally {
                 setIsFetching(false);
@@ -77,7 +79,7 @@ export default function PushNotifications() {
         };
 
         fetchPreferences();
-    }, [responder?.id]);
+    }, [responder?.id, t]);
 
     const handleToggle = async (
         type: keyof NotificationPreferences,
@@ -124,37 +126,37 @@ export default function PushNotifications() {
 
     if (error || !notifPreferences) {
         return (
-            <div className="text-center bg-red-50 border border-red-500 py-4 rounded-lg">
-                <p className="text-red-500 font-medium">{error}</p>
+            <div className="text-center bg-red-50 dark:bg-red-950/50 border border-red-500 dark:border-red-700 py-4 rounded-lg">
+                <p className="text-red-500 dark:text-red-400 font-medium">{error}</p>
             </div>
         );
     }
 
     return (
         <div>
-            <SectionLabel label="PUSH NOTIFICATIONS" />
+            <SectionLabel label={t("profile.pushNotifications")} />
             <Card className="!p-0">
                 <ToggleSection
                     Icon={TriangleAlert}
-                    label="Warning Alerts"
+                    label={t("profile.warningAlerts")}
                     isActive={notifPreferences.warning}
                     onToggle={(enabled) => handleToggle("warning", enabled)}
                 />
                 <ToggleSection
                     Icon={CircleAlert}
-                    label="Critical Alerts"
+                    label={t("profile.criticalAlerts")}
                     isActive={notifPreferences.critical}
                     onToggle={(enabled) => handleToggle("critical", enabled)}
                 />
                 <ToggleSection
                     Icon={Waves}
-                    label="Blockage Detections"
+                    label={t("profile.blockageDetections")}
                     isActive={notifPreferences.blockage}
                     onToggle={(enabled) => handleToggle("blockage", enabled)}
                 />
                 <ToggleSection
                     Icon={Megaphone}
-                    label="Announcements"
+                    label={t("profile.announcements")}
                     isActive={notifPreferences.announcement}
                     onToggle={(enabled) =>
                         handleToggle("announcement", enabled)

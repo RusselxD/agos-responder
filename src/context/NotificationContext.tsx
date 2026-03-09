@@ -8,6 +8,7 @@ import {
 } from "react";
 import { useCoreHook } from "./CoreContext";
 import { alertsAPI } from "../lib/api/alert";
+import { triggerAlertFeedback } from "../lib/utils/alertFeedback";
 
 interface NotificationContextValue {
     unreadCount: number;
@@ -37,6 +38,20 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
             fetchUnreadCount();
         }
     }, [responderId]);
+
+    // Listen for push notifications from service worker and play in-app sound
+    useEffect(() => {
+        const handler = (event: MessageEvent) => {
+            if (event.data?.type === "PUSH_RECEIVED") {
+                triggerAlertFeedback(event.data.alertType);
+                setUnreadCount((prev) => prev + 1);
+            }
+        };
+
+        navigator.serviceWorker?.addEventListener("message", handler);
+        return () =>
+            navigator.serviceWorker?.removeEventListener("message", handler);
+    }, []);
     const reduceUnreadCount = (amount: number = 1) => {
         setUnreadCount((prev) => Math.max(prev - amount, 0));
     };

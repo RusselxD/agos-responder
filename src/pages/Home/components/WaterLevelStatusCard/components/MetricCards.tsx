@@ -1,4 +1,5 @@
 import { useWaterLevel } from "../../../../../context/WaterLevelContext";
+import { useI18n } from "../../../../../context/I18nContext";
 
 type StatCardProps = {
     title: string;
@@ -11,12 +12,12 @@ const StatCard = ({ title, data, desc }: StatCardProps) => {
 
     return (
         <div
-            className={`border w-full h-full flex flex-col justify-between rounded-md px-3 py-2 ${warning ? "bg-amber-100 border-amber-300" : "bg-slate-100 border-gray-300"}`}
+            className={`border w-full h-full flex flex-col justify-between rounded-md px-3 py-2 ${warning ? "bg-amber-100 border-amber-300 dark:bg-amber-950/50 dark:border-amber-700" : "bg-slate-100 border-gray-300 dark:bg-slate-700 dark:border-slate-600"}`}
         >
-            <p className="text-sm font-medium text-gray-700">{title}</p>
+            <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{title}</p>
             <p>
                 <span className="text-2xl font-semibold">{data}</span>
-                <span className="text-xs ml-1 text-gray-700">{desc}</span>
+                <span className="text-xs ml-1 text-gray-700 dark:text-gray-300">{desc}</span>
             </p>
         </div>
     );
@@ -24,40 +25,41 @@ const StatCard = ({ title, data, desc }: StatCardProps) => {
 
 export default function MetricCards() {
     const { sensorData } = useWaterLevel();
+    const { t } = useI18n();
 
     const getTitleAndDesc = (): StatCardProps => {
         switch (sensorData?.alert.level) {
             case "normal":
                 return {
-                    title: "To Warning",
+                    title: t("home.toWarning"),
                     data: (
                         sensorData?.alert.distance_to_warning_cm || 0
                     ).toFixed(1),
-                    desc: "cm remaining",
+                    desc: t("home.cmRemaining"),
                 };
             case "warning":
                 return {
-                    title: "To Critical",
+                    title: t("home.toCritical"),
                     data: (
                         sensorData?.alert.distance_to_critical_cm || 0
                     ).toFixed(1),
-                    desc: "cm remaining",
+                    desc: t("home.cmRemaining"),
                 };
             case "critical":
                 return {
-                    title: "Above Critical",
+                    title: t("home.aboveCritical"),
                     data: (
                         sensorData?.alert.distance_from_critical_cm || 0
                     ).toFixed(1),
-                    desc: "cm over",
+                    desc: t("home.cmOver"),
                 };
             default:
                 return {
-                    title: "To Warning",
+                    title: t("home.toWarning"),
                     data: (
                         sensorData?.alert.distance_to_warning_cm || 0
                     ).toFixed(1),
-                    desc: "cm remaining",
+                    desc: t("home.cmRemaining"),
                 };
         }
     };
@@ -71,7 +73,7 @@ export default function MetricCards() {
     return (
         <div className="flex flex-col justify-between ml-10 gap-3 flex-1">
             <StatCard
-                title="Change Rate"
+                title={t("home.changeRate")}
                 data={changeRateDisplay}
                 desc="cm/min"
             />

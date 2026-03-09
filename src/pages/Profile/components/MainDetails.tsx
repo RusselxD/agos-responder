@@ -1,7 +1,9 @@
 import { Phone } from "lucide-react";
 import Card from "../../../components/common/Card";
 import { useCoreHook } from "../../../context/CoreContext";
+import { useI18n } from "../../../context/I18nContext";
 import { formatPHNumber } from "../../../lib/utils/phone";
+import ConnectionStatus from "./ConnectionStatus";
 
 const getLastChunkOfId = (id: string) => {
     let res = "";
@@ -15,15 +17,20 @@ const getLastChunkOfId = (id: string) => {
 
 export default function MainDetails() {
     const { responder } = useCoreHook();
+    const { t } = useI18n();
+
+    if (!responder) {
+        return <div className="skeleton h-28 w-full rounded-xl" />;
+    }
 
     return (
         <Card>
             <div>
                 <div className="flex items-center justify-between">
-                    <p className="text-sm font-medium text-gray-500">
-                        RESPONDER PROFILE
+                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                        {t("profile.responderProfile")}
                     </p>
-                    <p className="text-sm">Online</p>
+                    <ConnectionStatus />
                 </div>
                 <div className="flex justify-between items-end mt-2">
                     <div className="space-y-1">

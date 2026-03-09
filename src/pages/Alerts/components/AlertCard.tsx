@@ -8,6 +8,7 @@ import {
 import { formatTimestamp } from "../../../lib/utils/formatter.ts";
 import { ChevronRight } from "lucide-react";
 import { useAlertsPageHook } from "../context/AlertsPageContext.tsx";
+import { useI18n } from "../../../context/I18nContext";
 
 const AlertTypeBadge = ({ type }: { type: NotificationType }) => {
     return (
@@ -22,7 +23,7 @@ const AlertTypeBadge = ({ type }: { type: NotificationType }) => {
 
 const TimeStamp = ({ timestamp }: { timestamp: string }) => {
     return (
-        <p className="text-xs text-gray-500">{formatTimestamp(timestamp)}</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400">{formatTimestamp(timestamp)}</p>
     );
 };
 
@@ -30,17 +31,18 @@ const AlertBody = ({ title, message }: { title: string; message: string }) => {
     return (
         <div className="my-3 space-y-1 text-sm">
             <h2 className="font-semibold">{title}</h2>
-            <p className="text-gray-700">{message}</p>
+            <p className="text-gray-700 dark:text-gray-300">{message}</p>
         </div>
     );
 };
 
 const AcknowledgeBadge = ({ isAcknowledged }: { isAcknowledged: boolean }) => {
-    const message = isAcknowledged ? "Acknowledged" : "Unacknowledged";
+    const { t } = useI18n();
+    const message = isAcknowledged ? t("alerts.acknowledged") : t("alerts.unacknowledged");
 
     const badgeColor = isAcknowledged
-        ? "bg-green-100 text-green-700 border-green-400"
-        : "bg-amber-100 text-amber-700 border-amber-400";
+        ? "bg-green-100 text-green-700 border-green-400 dark:bg-green-950/50 dark:text-green-400 dark:border-green-700"
+        : "bg-amber-100 text-amber-700 border-amber-400 dark:bg-amber-950/50 dark:text-amber-400 dark:border-amber-700";
 
     return (
         <div className={`rounded-lg border ${badgeColor} px-2`}>
@@ -66,7 +68,7 @@ export default function AlertCard({ alert }: { alert: Alert }) {
 
                 <div className="flex items-center justify-between">
                     <AcknowledgeBadge isAcknowledged={alert.isAcknowledged} />
-                    <ChevronRight className="text-gray-600"/>
+                    <ChevronRight className="text-gray-600 dark:text-gray-400"/>
                 </div>
             </Card>
         </div>

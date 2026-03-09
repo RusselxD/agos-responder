@@ -5,10 +5,12 @@ import InputOTPField from "../components/InputOTPField";
 import { formatPHNumber } from "../../../lib/utils/phone";
 import { verifyAPI } from "../../../lib/api/verify";
 import { useVerify } from "../context/VerifyPageContext";
+import { useI18n } from "../../../context/I18nContext";
 
 export default function OTPVerification() {
     const { responderDetails } = useVerify();
     const navigate = useNavigate();
+    const { t } = useI18n();
 
     const [otp, setOtp] = useState<string[]>(new Array(6).fill(""));
     const [otpError, setOtpError] = useState<string>("");
@@ -82,15 +84,15 @@ export default function OTPVerification() {
 
     return (
         <Container
-            headerTitle="Enter Verification Code"
-            headerSubtitle="We sent a 6-digit code to your phone number. Enter it below to verify your account."
+            headerTitle={t("verify.enterCode")}
+            headerSubtitle={t("verify.enterCodeSubtitle")}
         >
             <div className="mt-5">
-                <div className="p-4 bg-gray-50 rounded-lg text-center mb-6">
-                    <p className="font-semibold text-gray-900">
+                <div className="p-4 bg-gray-50 dark:bg-slate-700 rounded-lg text-center mb-6">
+                    <p className="font-semibold text-gray-900 dark:text-gray-100">
                         {responderDetails.firstName} {responderDetails.lastName}
                     </p>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
                         {formatPHNumber(responderDetails.phoneNumber)}
                     </p>
                 </div>
@@ -107,21 +109,21 @@ export default function OTPVerification() {
                     />
 
                     {otpError && (
-                        <p className="mt-3 text-center text-sm text-red-600 bg-red-50 py-2 px-2 border border-red-200 rounded-md">
+                        <p className="mt-3 text-center text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/50 py-2 px-2 border border-red-200 dark:border-red-700 rounded-md">
                             {otpError}
                         </p>
                     )}
 
                     {resendSuccess && (
-                        <p className="mt-3 text-center text-sm text-green-600 bg-green-50 py-2 px-2 border border-green-200 rounded-md">
-                            A new verification code has been sent.
+                        <p className="mt-3 text-center text-sm text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-950/50 py-2 px-2 border border-green-200 dark:border-green-700 rounded-md">
+                            {t("verify.newCodeSent")}
                         </p>
                     )}
 
                     {isVerifying && (
                         <div className="mt-4 flex items-center justify-center gap-2 text-sm text-gray-600">
                             <div className="spinner w-4 h-4 border-primary border-t-transparent" />
-                            <span>Verifying...</span>
+                            <span>{t("verify.verifying")}</span>
                         </div>
                     )}
 
@@ -132,17 +134,17 @@ export default function OTPVerification() {
                                 disabled={isResending}
                                 className="text-sm font-medium text-primary hover:text-primary/80 disabled:opacity-50"
                             >
-                                {isResending ? "Sending..." : "Send new code"}
+                                {isResending ? t("verify.sending") : t("verify.sendNewCode")}
                             </button>
                         ) : (
                             <p className="text-sm text-gray-500">
-                                Didn't receive the code?{" "}
+                                {t("verify.didntReceive")}{" "}
                                 <button
                                     onClick={handleResendOTP}
                                     disabled={isResending}
                                     className="font-medium text-primary hover:text-primary/80 disabled:opacity-50"
                                 >
-                                    {isResending ? "Sending..." : "Resend"}
+                                    {isResending ? t("verify.sending") : t("verify.resend")}
                                 </button>
                             </p>
                         )}
@@ -151,8 +153,7 @@ export default function OTPVerification() {
             </div>
 
             <p className="mt-6 text-center text-xs text-gray-500">
-                By verifying, you agree to receive emergency SMS alerts from
-                AGOS Flood Monitoring System.
+                {t("verify.agreement")}
             </p>
         </Container>
     );

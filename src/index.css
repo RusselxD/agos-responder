@@ -7,6 +7,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    html {
+        @apply text-gray-900 dark:text-gray-100;
+    }
+}
+
 body {
     font-family:
         "Poppins",
@@ -38,6 +44,10 @@ body {
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
     }
 
+    :is(.dark .custom-shadow) {
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+    }
+
     .spinner {
         @apply border-[3px] border-solid border-transparent;
         @apply border-t-current border-r-current;
@@ -56,7 +66,7 @@ body {
     }
 
     .skeleton {
-        @apply relative overflow-hidden bg-[#e5e7eb];
+        @apply relative overflow-hidden bg-[#e5e7eb] dark:bg-slate-700;
     }
 
     .skeleton::after {
@@ -71,6 +81,16 @@ body {
         );
 
         @apply animate-[shimmer_2s_infinite];
+    }
+
+    :is(.dark .skeleton)::after {
+        background-image: linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0) 0,
+            rgba(255, 255, 255, 0.05) 20%,
+            rgba(255, 255, 255, 0.1) 60%,
+            rgba(255, 255, 255, 0)
+        );
     }
 }
 

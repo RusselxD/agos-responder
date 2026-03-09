@@ -1,20 +1,29 @@
 import { BellOff } from "lucide-react";
 import Page from "../../../components/common/Page";
 import { FILTERS, useAlertsPageHook } from "../context/AlertsPageContext";
-import { capitalizeFirstLetter } from "../../../lib/utils/formatter";
+import { useI18n } from "../../../context/I18nContext";
+import type { TranslationKey } from "../../../lib/i18n";
+
+const filterLabelKeys: Record<string, TranslationKey> = {
+    all: "alerts.all",
+    critical: "alerts.critical",
+    warning: "alerts.warning",
+    announcement: "alerts.announcement",
+};
 
 export const EmptyPage = ({ isAllChosen }: { isAllChosen: boolean }) => {
+    const { t } = useI18n();
     const message = isAllChosen
-        ? "You're all caught up! New critical alerts, warnings, and announcements will appear here."
-        : "No alerts of this type. Try changing the filter to see more alerts.";
+        ? t("alerts.allCaughtUp")
+        : t("alerts.noAlertsOfType");
 
     return (
         <Page className="flex flex-col items-center gap-4 !space-y-0 pt-10">
-            <div className="rounded-full bg-gray-200 p-4">
-                <BellOff className="w-8 h-8 text-gray-400" />
+            <div className="rounded-full bg-gray-200 dark:bg-slate-700 p-4">
+                <BellOff className="w-8 h-8 text-gray-400 dark:text-gray-500" />
             </div>
-            <h2 className="font-semibold text-xl">No alerts</h2>
-            <p className="text-center text-gray-600">{message}</p>
+            <h2 className="font-semibold text-xl">{t("alerts.noAlerts")}</h2>
+            <p className="text-center text-gray-600 dark:text-gray-400">{message}</p>
         </Page>
     );
 };
@@ -35,7 +44,7 @@ export const AlertsSkeleton = () => {
 export const ErrorPage = ({ message }: { message: string }) => {
     return (
         <Page>
-            <div className="text-red-500 w-full rounded-lg p-3 border border-red-500 bg-red-50 text-sm">
+            <div className="text-red-500 dark:text-red-400 w-full rounded-lg p-3 border border-red-500 dark:border-red-700 bg-red-50 dark:bg-red-950/50 text-sm">
                 {message}
             </div>
         </Page>
@@ -44,6 +53,7 @@ export const ErrorPage = ({ message }: { message: string }) => {
 
 export const AlertTypeFilters = () => {
     const { chosenFilter, handleFilterChange } = useAlertsPageHook();
+    const { t } = useI18n();
 
     return (
         <div className="flex items-center gap-1 flex-wrap">
@@ -54,7 +64,7 @@ export const AlertTypeFilters = () => {
                         className={`px-4 py-2 text-sm rounded-md text-white ${chosenFilter === filter ? "bg-primary" : "bg-accent/70"}`}
                         onClick={() => handleFilterChange(filter)}
                     >
-                        {capitalizeFirstLetter(filter)}
+                        {t(filterLabelKeys[filter])}
                     </button>
                 );
             })}

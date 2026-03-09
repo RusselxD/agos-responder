@@ -1,6 +1,7 @@
 import SectionLabel from "./common/SectionLabel";
 import Card from "../../../components/common/Card";
 import { useCoreHook } from "../../../context/CoreContext";
+import { useI18n } from "../../../context/I18nContext";
 import { formatDate } from "../../../lib/utils/formatter";
 
 interface DetailsProps {
@@ -12,7 +13,7 @@ interface DetailsProps {
 const Details = ({ label, value, borderBottom = true }: DetailsProps) => {
     return (
         <div
-            className={`flex py-4 px-4 items-center justify-between ${borderBottom ? "border-b border-gray-300" : ""}`}
+            className={`flex py-4 px-4 items-center justify-between ${borderBottom ? "border-b border-gray-300 dark:border-slate-600" : ""}`}
         >
             <p className="font-semibold">{label}</p>
             <p className="text-sm font-medium">{value}</p>
@@ -22,21 +23,22 @@ const Details = ({ label, value, borderBottom = true }: DetailsProps) => {
 
 export default function AccountDetails() {
     const { responder } = useCoreHook();
+    const { t } = useI18n();
 
     return (
         <div>
-            <SectionLabel label="ACCOUNT" />
+            <SectionLabel label={t("profile.account")} />
             <Card className="!p-0">
                 <Details
-                    label="Registered"
+                    label={t("profile.registered")}
                     value={formatDate(responder?.createdAt || "") || "N/A"}
                 />
                 <Details
-                    label="Activated"
+                    label={t("profile.activated")}
                     value={formatDate(responder?.activatedAt || "") || "N/A"}
                 />
                 <Details
-                    label="Assigned Site"
+                    label={t("profile.assignedSite")}
                     value={responder?.locationName || "N/A"}
                     borderBottom={false}
                 />

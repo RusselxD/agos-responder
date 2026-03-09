@@ -12,10 +12,16 @@ import { useCoreHook } from "./CoreContext";
 
 const websocketUrl = import.meta.env.VITE_API_WS_URL;
 
+const MAX_BACKOFF_MS = 30_000;
+const BASE_BACKOFF_MS = 1_000;
+
 type WebSocketMessage = { type: string; data: any };
+type ConnectionStatus = "connecting" | "connected" | "disconnected";
 
 interface WSContextValue {
     isConnected: boolean;
+    connectionStatus: ConnectionStatus;
+    reconnect: () => void;
     subscribe: (type: string, callback: (data: any) => void) => () => void;
 }
 
@@ -23,16 +29,37 @@ const WSContext = createContext<WSContextValue | undefined>(undefined);
 
 export function WebSocketProvider({ children }: { children: ReactNode }) {
     const socketRef = useRef<WebSocket | null>(null);
-    const [isConnected, setIsConnected] = useState(false);
+    const [connectionStatus, setConnectionStatus] =
+        useState<ConnectionStatus>("disconnected");
     const { responder } = useCoreHook();
+
+    // Track whether the component is mounted to prevent reconnect after unmount
+    const mountedRef = useRef(true);
+    // Track intentional close to prevent reconnect on unmount
+    const intentionalCloseRef = useRef(false);
+    // Backoff state for reconnect attempts
+    const retryCountRef = useRef(0);
+    const retryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     // Storage box that keeps track of event listeners for different message types
     const listenersRef = useRef<Map<string, Set<(data: any) => void>>>(
         new Map(),
     );
 
-    useEffect(() => {
-        if (!responder) return;
+    const connect = useCallback(() => {
+        if (!responder || !mountedRef.current) return;
+
+        // Clean up existing connection — close silently without triggering reconnect
+        if (socketRef.current) {
+            const oldSocket = socketRef.current;
+            socketRef.current = null;
+            oldSocket.onclose = null;
+            oldSocket.onerror = null;
+            oldSocket.onmessage = null;
+            oldSocket.close();
+        }
+
+        setConnectionStatus("connecting");
 
         const ws = new WebSocket(
             `${websocketUrl}/ws?location_id=${responder.locationId}`,
@@ -41,7 +68,8 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
 
         ws.onopen = () => {
             console.log("WebSocket connected");
-            setIsConnected(true);
+            setConnectionStatus("connected");
+            retryCountRef.current = 0; // Reset backoff on successful connect
         };
 
         ws.onmessage = (e) => {
@@ -49,7 +77,6 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
                 const message: WebSocketMessage = JSON.parse(e.data);
                 console.log("Message received: ", message);
 
-                // Call function subscribers for this message type
                 const callbacks = listenersRef.current.get(message.type);
                 if (callbacks) {
                     callbacks.forEach((callback) => callback(message.data));
@@ -61,39 +88,66 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
 
         ws.onclose = () => {
             console.log("WebSocket disconnected");
-            setIsConnected(false);
+            setConnectionStatus("disconnected");
+
+            // Auto-reconnect with exponential backoff unless intentionally closed
+            if (!intentionalCloseRef.current && mountedRef.current) {
+                const delay = Math.min(
+                    BASE_BACKOFF_MS * 2 ** retryCountRef.current,
+                    MAX_BACKOFF_MS,
+                );
+                console.log(`Reconnecting in ${delay}ms...`);
+                retryTimeoutRef.current = setTimeout(() => {
+                    retryCountRef.current += 1;
+                    connect();
+                }, delay);
+            }
         };
 
         ws.onerror = (error) => {
             console.error("WebSocket error:", error);
         };
-
-        return () => {
-            ws.close();
-        };
     }, [responder]);
 
-    // Function to subscribe to messages of a specific type
-    // useCallback memoizes a function definition between component re-renders
+    // Connect when responder is available
+    useEffect(() => {
+        mountedRef.current = true;
+        connect();
+
+        return () => {
+            mountedRef.current = false;
+            intentionalCloseRef.current = true;
+            if (retryTimeoutRef.current) {
+                clearTimeout(retryTimeoutRef.current);
+            }
+            socketRef.current?.close();
+        };
+    }, [connect]);
+
+    // Manual reconnect: reset backoff and connect immediately
+    const reconnect = useCallback(() => {
+        retryCountRef.current = 0;
+        if (retryTimeoutRef.current) {
+            clearTimeout(retryTimeoutRef.current);
+            retryTimeoutRef.current = null;
+        }
+        connect();
+    }, [connect]);
+
     const subscribe = useCallback(
         (type: string, callback: (data: any) => void) => {
-            // If no one is listening to this type yet, create a new set
             if (!listenersRef.current.has(type)) {
                 listenersRef.current.set(type, new Set());
             }
 
-            // Add the callback to the set of listeners for this type
             listenersRef.current.get(type)!.add(callback);
 
-            // Return a cleanup function that will remove THIS specific callback
-            // when the component unmounts (called by React's useEffect cleanup)
             return () => {
                 const callbacks = listenersRef.current.get(type);
                 if (callbacks) {
-                    callbacks.delete(callback); // Remove the callback from the set
+                    callbacks.delete(callback);
 
                     if (callbacks.size === 0) {
-                        // If no more listeners, remove the set
                         listenersRef.current.delete(type);
                     }
                 }
@@ -102,12 +156,16 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
         [],
     );
 
+    const isConnected = connectionStatus === "connected";
+
     const contextValue = useMemo(
         () => ({
             isConnected,
+            connectionStatus,
+            reconnect,
             subscribe,
         }),
-        [isConnected, subscribe],
+        [isConnected, connectionStatus, reconnect, subscribe],
     );
 
     return (

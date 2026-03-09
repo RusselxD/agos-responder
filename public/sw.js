@@ -7,17 +7,42 @@ clientsClaim();
 cleanupOutdatedCaches();
 precacheAndRoute(self.__WB_MANIFEST);
 
+// Vibration patterns per alert type
+const vibrationPatterns = {
+    critical: [200, 100, 200, 100, 400],
+    warning: [200, 100, 200],
+    blockage: [150, 80, 150],
+    announcement: [100],
+};
+
 // Push notification handlers
 self.addEventListener("push", (event) => {
     const data = event.data?.json() ?? { title: "AGOS", message: "" };
+    const type = data.type || "announcement";
+    const vibrate = vibrationPatterns[type] || vibrationPatterns.announcement;
 
     event.waitUntil(
-        self.registration.showNotification(data.title, {
-            body: data.message,
-            icon: "/agos.png",
-            badge: "/agos.png",
-            data: { url: data.url ?? "/" },
-        }),
+        Promise.all([
+            self.registration.showNotification(data.title, {
+                body: data.message,
+                icon: "/agos.png",
+                badge: "/agos.png",
+                vibrate,
+                tag: type,
+                data: { url: data.url ?? "/", type },
+            }),
+            // Notify focused clients for in-app sound feedback
+            clients
+                .matchAll({ type: "window", includeUncontrolled: true })
+                .then((clientList) => {
+                    for (const client of clientList) {
+                        client.postMessage({
+                            type: "PUSH_RECEIVED",
+                            alertType: type,
+                        });
+                    }
+                }),
+        ]),
     );
 });
 
