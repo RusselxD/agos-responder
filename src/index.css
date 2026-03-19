@@ -40,6 +40,26 @@ body {
         @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-primary;
     }
 
+    :is(.dark .btn-submit) {
+        @apply bg-accent text-slate-900;
+    }
+
+    :is(.dark .btn-submit):not(:disabled):active {
+        @apply bg-accent/90;
+    }
+
+    :is(.dark .btn-submit):disabled {
+        @apply hover:bg-accent;
+    }
+
+    .verify-layout {
+        background-color: #F8F8F8;
+    }
+
+    :is(.dark .verify-layout) {
+        background: radial-gradient(ellipse at 50% 20%, #162544 0%, #0f172a 60%);
+    }
+
     .custom-shadow {
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
     }
