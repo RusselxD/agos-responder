@@ -15,6 +15,7 @@ import { isAxiosError } from "axios";
 interface CoreContextValue {
     responderId: string;
     responder: Responder | null;
+    isLoading: boolean;
     logOut: () => void;
 }
 
@@ -24,6 +25,7 @@ export function CoreProvider({ children }: { children: ReactNode }) {
     const responderId = localStorage.getItem("responderId") || "";
 
     const [responder, setResponder] = useState<Responder | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate();
 
@@ -43,11 +45,15 @@ export function CoreProvider({ children }: { children: ReactNode }) {
                     return;
                 }
                 console.error("Failed to fetch responder details:", error);
+            } finally {
+                setIsLoading(false);
             }
         };
 
         if (responderId) {
             fetchResponderDetails();
+        } else {
+            setIsLoading(false);
         }
     }, [responderId, logOut]);
 
@@ -55,9 +61,10 @@ export function CoreProvider({ children }: { children: ReactNode }) {
         () => ({
             responderId,
             responder,
+            isLoading,
             logOut,
         }),
-        [responderId, responder],
+        [responderId, responder, isLoading, logOut],
     );
 
     return (

@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import BottomNav from "../components/BottomNav";
 import { WebSocketProvider } from "../context/WebsocketContext";
-import { CoreProvider } from "../context/CoreContext";
+import { CoreProvider, useCoreHook } from "../context/CoreContext";
 import { FusionAnalysisProvider } from "../context/FusionAnalysisContext";
 import { BlockageProvider } from "../context/BlockageContext";
 import { WaterLevelProvider } from "../context/WaterLevelContext";
@@ -9,28 +9,44 @@ import AppHeader from "../components/AppHeader";
 import { WeatherProvider } from "../context/WeatherContext";
 import { NotificationProvider } from "../context/NotificationContext";
 
+function CoreGate({ children }: { children: React.ReactNode }) {
+    const { isLoading } = useCoreHook();
+
+    if (isLoading) {
+        return (
+            <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-white dark:bg-slate-900">
+                <img src="/agos.png" className="w-32" />
+            </div>
+        );
+    }
+
+    return <>{children}</>;
+}
+
 export default function MainLayout() {
     return (
         <CoreProvider>
-            <WebSocketProvider>
-                <FusionAnalysisProvider>
-                    <BlockageProvider>
-                        <WaterLevelProvider>
-                            <WeatherProvider>
-                                <NotificationProvider>
-                                    <div>
-                                        <AppHeader />
-                                        <div className="min-h-[100dvh] bg-background dark:bg-background-dark pt-14 pb-16">
-                                            <Outlet />
+            <CoreGate>
+                <WebSocketProvider>
+                    <FusionAnalysisProvider>
+                        <BlockageProvider>
+                            <WaterLevelProvider>
+                                <WeatherProvider>
+                                    <NotificationProvider>
+                                        <div>
+                                            <AppHeader />
+                                            <div className="min-h-[100dvh] bg-background dark:bg-background-dark pt-14 pb-16">
+                                                <Outlet />
+                                            </div>
+                                            <BottomNav />
                                         </div>
-                                        <BottomNav />
-                                    </div>
-                                </NotificationProvider>
-                            </WeatherProvider>
-                        </WaterLevelProvider>
-                    </BlockageProvider>
-                </FusionAnalysisProvider>
-            </WebSocketProvider>
+                                    </NotificationProvider>
+                                </WeatherProvider>
+                            </WaterLevelProvider>
+                        </BlockageProvider>
+                    </FusionAnalysisProvider>
+                </WebSocketProvider>
+            </CoreGate>
         </CoreProvider>
     );
 }
