@@ -30,7 +30,7 @@ const TimeStamp = ({ timestamp }: { timestamp: string }) => {
 const AlertBody = ({ title, message }: { title: string; message: string }) => {
     return (
         <div className="my-3 space-y-1 text-sm">
-            <h2 className="font-semibold">{title}</h2>
+            <h2 className="font-semibold dark:text-white">{title}</h2>
             <p className="text-gray-700 dark:text-gray-300">{message}</p>
         </div>
     );

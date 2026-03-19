@@ -25,7 +25,7 @@ export const Header = ({
     return (
         <div className="flex flex-col items-center gap-2.5">
             <AlertTypeBadge type={type} />
-            <h2 className="font-semibold text-[1.120rem]">{title}</h2>
+            <h2 className="font-semibold text-[1.120rem] dark:text-white">{title}</h2>
             <AcknowledgeBadge isAcknowledged={isAcknowledged} />
         </div>
     );
@@ -40,7 +40,7 @@ export const NotificationDetails = ({
 }) => {
     return (
         <div className="bg-gray-100 dark:bg-slate-700 p-3 rounded-xl flex flex-col gap-1.5">
-            <p className="text-sm">{message}</p>
+            <p className="text-sm dark:text-gray-200">{message}</p>
             <span className="text-[0.800rem] text-gray-500 dark:text-gray-400">
                 {formatDate(timestamp)}
             </span>
@@ -104,7 +104,7 @@ export const AcknowledgeNotification = () => {
             <textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                className="text-sm p-2 border border-gray-400 dark:border-slate-600 rounded-lg resize-none outline-none focus:outline-none focus:ring-0 focus:border-gray-400 dark:focus:border-slate-500 bg-transparent"
+                className="text-sm p-2 border border-gray-400 dark:border-slate-600 rounded-lg resize-none outline-none focus:outline-none focus:ring-0 focus:border-gray-400 dark:focus:border-slate-500 bg-transparent dark:text-gray-200 dark:placeholder-gray-500"
                 rows={3}
                 placeholder={t("alerts.placeholder")}
             />

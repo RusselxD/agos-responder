@@ -28,7 +28,7 @@ export default function AppHeader() {
             </div>
             <div className="flex items-center gap-1">
                 <MapPinFilled className="text-red-500" />
-                <p className="font-semibold mt-1">{responder?.locationName}</p>
+                <p className="font-semibold mt-1 dark:text-white">{responder?.locationName}</p>
             </div>
         </div>
     );

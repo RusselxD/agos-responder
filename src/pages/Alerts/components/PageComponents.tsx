@@ -22,7 +22,7 @@ export const EmptyPage = ({ isAllChosen }: { isAllChosen: boolean }) => {
             <div className="rounded-full bg-gray-200 dark:bg-slate-700 p-4">
                 <BellOff className="w-8 h-8 text-gray-400 dark:text-gray-500" />
             </div>
-            <h2 className="font-semibold text-xl">{t("alerts.noAlerts")}</h2>
+            <h2 className="font-semibold text-xl dark:text-white">{t("alerts.noAlerts")}</h2>
             <p className="text-center text-gray-600 dark:text-gray-400">{message}</p>
         </Page>
     );
@@ -61,7 +61,7 @@ export const AlertTypeFilters = () => {
                 return (
                     <button
                         key={filter}
-                        className={`px-4 py-2 text-sm rounded-md text-white ${chosenFilter === filter ? "bg-primary" : "bg-accent/70"}`}
+                        className={`px-4 py-2 text-sm rounded-md text-white ${chosenFilter === filter ? "bg-primary dark:bg-accent dark:text-slate-900" : "bg-accent/70"}`}
                         onClick={() => handleFilterChange(filter)}
                     >
                         {t(filterLabelKeys[filter])}
