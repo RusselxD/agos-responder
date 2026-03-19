@@ -5,18 +5,7 @@ export const responderAPI = {
     getResponderDetails: async (responderId: string): Promise<Responder> => {
         try {
             const res = await apiClient.get(`/responder/${responderId}`);
-            const d = res.data;
-            return {
-                id: d.id,
-                firstName: d.first_name,
-                lastName: d.last_name,
-                status: d.status,
-                phoneNumber: d.phone_number,
-                locationId: d.location_id,
-                locationName: d.location_name,
-                createdAt: d.created_at,
-                activatedAt: d.activated_at,
-            };
+            return res.data as Responder;
         } catch (error) {
             throw error;
         }
