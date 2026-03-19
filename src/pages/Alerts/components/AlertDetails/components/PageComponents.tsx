@@ -177,7 +177,7 @@ export const AcknowledgeBadge = ({
                 <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
             )}
             <span
-                className={`${isAcknowledged ? "text-green-600" : "text-yellow-500"}`}
+                className={`${isAcknowledged ? "text-green-600 dark:text-green-400" : "text-yellow-500 dark:text-yellow-400"}`}
             >
                 {message}
             </span>

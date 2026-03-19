@@ -10,17 +10,17 @@ const statusConfig: Record<
     connecting: {
         labelKey: "profile.connecting",
         dotColor: "bg-yellow-400",
-        textColor: "text-yellow-600",
+        textColor: "text-yellow-600 dark:text-yellow-400",
     },
     connected: {
         labelKey: "profile.online",
         dotColor: "bg-emerald-400",
-        textColor: "text-emerald-600",
+        textColor: "text-emerald-600 dark:text-emerald-400",
     },
     disconnected: {
         labelKey: "profile.offline",
         dotColor: "bg-red-400",
-        textColor: "text-red-600",
+        textColor: "text-red-600 dark:text-red-400",
     },
 };
 

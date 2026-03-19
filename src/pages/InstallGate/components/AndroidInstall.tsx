@@ -153,13 +153,13 @@ export default function AndroidInstall() {
             </button>
 
             {installState === "error" && errorMessage && (
-                <p className="text-sm text-red-600" role="alert">
+                <p className="text-sm text-red-600 dark:text-red-400" role="alert">
                     {errorMessage}
                 </p>
             )}
 
             {(installState === "unavailable" || installState === "dismissed") && (
-                <p className="text-sm text-gray-700">
+                <p className="text-sm text-gray-700 dark:text-gray-300">
                     {installState === "dismissed"
                         ? "Install was cancelled. You can try again or use the manual method below."
                         : null}

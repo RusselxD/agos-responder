@@ -50,12 +50,12 @@ export default function PhoneLookup() {
             headerSubtitle={t("verify.activateSubtitle")}
         >
             {error && (
-                <p className="text-sm mt-3 text-red-600 bg-red-50 py-2 px-2 border border-red-500 rounded-md">
+                <p className="text-sm mt-3 text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/50 py-2 px-2 border border-red-500 dark:border-red-700 rounded-md">
                     {error}
                 </p>
             )}
             <div className="mt-5">
-                <p className="block text-sm font-medium text-gray-700 mb-1">
+                <p className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     {t("verify.mobileNumber")}
                 </p>
                 <PhoneNumberInput

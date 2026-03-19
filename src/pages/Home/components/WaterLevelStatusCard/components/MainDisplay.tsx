@@ -16,22 +16,22 @@ const AlertCategory = () => {
             case "normal":
                 return {
                     circle: "bg-green-600",
-                    text: "text-green-700",
+                    text: "text-green-700 dark:text-green-400",
                 };
             case "warning":
                 return {
                     circle: "bg-yellow-500",
-                    text: "text-yellow-600",
+                    text: "text-yellow-600 dark:text-yellow-400",
                 };
             case "critical":
                 return {
                     circle: "bg-red-600",
-                    text: "text-red-700",
+                    text: "text-red-700 dark:text-red-400",
                 };
             default:
                 return {
                     circle: "bg-gray-600",
-                    text: "text-gray-700",
+                    text: "text-gray-700 dark:text-gray-300",
                 };
         }
     };

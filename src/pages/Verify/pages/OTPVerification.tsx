@@ -121,7 +121,7 @@ export default function OTPVerification() {
                     )}
 
                     {isVerifying && (
-                        <div className="mt-4 flex items-center justify-center gap-2 text-sm text-gray-600">
+                        <div className="mt-4 flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-gray-300">
                             <div className="spinner w-4 h-4 border-primary border-t-transparent" />
                             <span>{t("verify.verifying")}</span>
                         </div>
@@ -137,7 +137,7 @@ export default function OTPVerification() {
                                 {isResending ? t("verify.sending") : t("verify.sendNewCode")}
                             </button>
                         ) : (
-                            <p className="text-sm text-gray-500">
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
                                 {t("verify.didntReceive")}{" "}
                                 <button
                                     onClick={handleResendOTP}
