@@ -132,7 +132,7 @@ export default function OTPVerification() {
                             <button
                                 onClick={handleResendOTP}
                                 disabled={isResending}
-                                className="text-sm font-medium text-primary hover:text-primary/80 disabled:opacity-50"
+                                className="text-sm font-medium text-primary dark:text-accent hover:text-primary/80 dark:hover:text-accent/80 disabled:opacity-50"
                             >
                                 {isResending ? t("verify.sending") : t("verify.sendNewCode")}
                             </button>
@@ -142,7 +142,7 @@ export default function OTPVerification() {
                                 <button
                                     onClick={handleResendOTP}
                                     disabled={isResending}
-                                    className="font-medium text-primary hover:text-primary/80 disabled:opacity-50"
+                                    className="font-medium text-primary dark:text-accent hover:text-primary/80 dark:hover:text-accent/80 disabled:opacity-50"
                                 >
                                     {isResending ? t("verify.sending") : t("verify.resend")}
                                 </button>

@@ -34,10 +34,10 @@ export default function MainDetails() {
                 </div>
                 <div className="flex justify-between items-end mt-2">
                     <div className="space-y-1">
-                        <h2 className="font-bold text-2xl">{`${responder?.firstName} ${responder?.lastName || ""}`}</h2>
+                        <h2 className="font-bold text-2xl dark:text-white">{`${responder?.firstName} ${responder?.lastName || ""}`}</h2>
                         <div className="flex items-center gap-2">
-                            <Phone className="w-4 h-4" />
-                            <p className="text-sm">
+                            <Phone className="w-4 h-4 dark:text-gray-300" />
+                            <p className="text-sm dark:text-gray-300">
                                 {formatPHNumber(responder?.phoneNumber || "")}
                             </p>
                         </div>

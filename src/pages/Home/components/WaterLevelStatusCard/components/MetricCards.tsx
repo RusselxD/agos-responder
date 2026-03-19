@@ -16,7 +16,7 @@ const StatCard = ({ title, data, desc }: StatCardProps) => {
         >
             <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{title}</p>
             <p>
-                <span className="text-2xl font-semibold">{data}</span>
+                <span className="text-2xl font-semibold dark:text-white">{data}</span>
                 <span className="text-xs ml-1 text-gray-700 dark:text-gray-300">{desc}</span>
             </p>
         </div>

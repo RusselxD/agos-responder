@@ -33,9 +33,9 @@ const ToggleSection = ({
             className={`flex py-4 px-4 items-center justify-between ${borderBottom ? "border-b border-gray-300 dark:border-slate-600" : ""}`}
         >
             <div className="flex items-center gap-2">
-                <Icon className="w-6 h-6" />
+                <Icon className="w-6 h-6 dark:text-gray-400" />
                 <div>
-                    <p className="text-sm font-medium">{label}</p>
+                    <p className="text-sm font-medium dark:text-gray-200">{label}</p>
                 </div>
             </div>
 

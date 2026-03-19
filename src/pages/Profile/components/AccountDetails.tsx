@@ -15,8 +15,8 @@ const Details = ({ label, value, borderBottom = true }: DetailsProps) => {
         <div
             className={`flex py-4 px-4 items-center justify-between ${borderBottom ? "border-b border-gray-300 dark:border-slate-600" : ""}`}
         >
-            <p className="font-semibold">{label}</p>
-            <p className="text-sm font-medium">{value}</p>
+            <p className="font-semibold dark:text-gray-200">{label}</p>
+            <p className="text-sm font-medium dark:text-gray-400">{value}</p>
         </div>
     );
 };

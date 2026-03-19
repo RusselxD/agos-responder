@@ -69,8 +69,8 @@ const LevelInfo = () => {
 
     return (
         <div className="flex items-center gap-1">
-            <ArrowIcon size={16} />
-            <span className="text-sm">
+            <ArrowIcon size={16} className="dark:text-gray-300" />
+            <span className="text-sm dark:text-gray-300">
                 {capitalizeFirstLetter(level || "")}
             </span>
         </div>
@@ -137,12 +137,12 @@ export default function MainDisplay() {
                 <GaugeDisplay />
                 <div className="space-y-2">
                     <p>
-                        <span className="text-2xl font-semibold">
+                        <span className="text-2xl font-semibold dark:text-white">
                             {`${(
                                 sensorData?.water_level.current_cm || 0
                             ).toFixed(1)} `}
                         </span>
-                        <span>cm</span>
+                        <span className="dark:text-gray-300">cm</span>
                     </p>
                     <AlertCategory />
                     <LevelInfo />
