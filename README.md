@@ -1,6 +1,6 @@
 # AGOS Responders
 
-Progressive Web App (PWA) for field responders in AGOS (Advanced Governance and Operations System) — a real-time water management and flood monitoring platform.
+Progressive Web App (PWA) for field responders in AGOS — a real-time water management and flood monitoring platform.
 
 ## Stack
 
