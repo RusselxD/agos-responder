@@ -1,73 +1,118 @@
-# React + TypeScript + Vite
+# AGOS Responders
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Progressive Web App (PWA) for field responders in AGOS (Advanced Governance and Operations System) — a real-time water management and flood monitoring platform.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Framework**: React 19 + TypeScript
+- **Build**: Vite 7
+- **PWA**: vite-plugin-pwa (Workbox) with custom service worker
+- **Styling**: Tailwind CSS (font: Poppins), dark mode support (light/dark/system)
+- **Routing**: React Router 7
+- **HTTP**: Axios (auto camelCase/snake_case conversion interceptors)
+- **i18n**: English + Filipino (Tagalog)
+- **Icons**: Lucide React
+- **State**: Context API
+- **Real-time**: WebSocket
+- **Push**: Web Push API + VAPID
 
-## React Compiler
+## Prerequisites
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Node.js 18+
+- Running AGOS backend
 
-## Expanding the ESLint configuration
+## Setup
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+```bash
+# Install dependencies
+npm install
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+# Create .env file
+echo 'VITE_API_BASE_URL=http://localhost:8000' > .env
+echo 'VITE_API_WS_URL=ws://localhost:8000/ws' >> .env
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Start dev server
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Environment Variables
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| Variable | Description |
+|----------|-------------|
+| `VITE_API_BASE_URL` | Backend API URL (e.g., `http://localhost:8000`) |
+| `VITE_API_WS_URL` | Backend WebSocket URL (e.g., `ws://localhost:8000/ws`) |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start dev server with HMR |
+| `npm run build` | Type-check and build for production |
+| `npm run lint` | Run ESLint |
+| `npm run preview` | Preview production build |
+
+## Pages
+
+| Route | Page | Description |
+|-------|------|-------------|
+| `/home` | Home | Dashboard with fusion risk, blockage, water level, weather cards |
+| `/alerts` | Alerts | Alert list with type filters, acknowledgement |
+| `/me` | Profile | Push notification prefs, language, theme, logout |
+| `/install` | Install Gate | PWA install instructions (Android/iOS) |
+| `/verify/phone-lookup` | Phone Lookup | Enter phone number to start registration |
+| `/verify/otp-verification` | OTP Verification | Enter OTP to confirm identity |
+
+## Auth Flow
+
+1. Responder enters phone number at `/verify/phone-lookup`
+2. Backend sends OTP via SMS (SMSGate Android app)
+3. Responder enters OTP at `/verify/otp-verification`
+4. On success, `responderId` is stored in localStorage
+5. All subsequent API calls use this `responderId`
+6. No JWT — lightweight auth for field use
+
+## Push Notifications
+
+The app uses Web Push with VAPID for real-time alerts:
+
+1. Service worker (`public/sw.js`) handles push events
+2. Native notifications with vibration patterns per severity
+3. In-app audio feedback (Web Audio API tones)
+4. Offline acknowledgement queue — acks are queued and flushed on reconnect
+
+## Project Structure
+
 ```
+src/
+├── components/          # AppHeader, BottomNav, common components
+├── context/             # Global context providers
+│   ├── CoreContext        # Responder profile + logout
+│   ├── WebSocketContext   # WS connection + message subscription
+│   ├── BlockageContext    # Blockage detection state
+│   ├── WeatherContext     # Weather data state
+│   ├── WaterLevelContext  # Sensor data state
+│   ├── FusionAnalysisContext  # Fusion risk score state
+│   ├── NotificationContext    # Unread count + push handling
+│   ├── ThemeContext       # Light/dark/system theme
+│   └── I18nContext        # English/Filipino translations
+├── guards/              # AuthGuard, InstalledGuard
+├── hooks/               # usePushNotifications
+├── layouts/             # MainLayout, VerifyLayout
+├── lib/
+│   ├── api/             # API client modules (verify, responder, alert, sensor)
+│   ├── i18n/            # Translation files (en.ts, fil.ts)
+│   └── utils/           # Formatters, alertFeedback, offlineQueue, pwa
+├── pages/               # Page components (folder per page)
+└── types/               # TypeScript interfaces
+```
+
+## Key Differences from Admin Frontend
+
+| Concern | Admin Frontend | Responders PWA |
+|---------|---------------|----------------|
+| Auth | JWT (access + refresh tokens) | `responderId` in localStorage |
+| Field naming | snake_case directly | camelCase (axios auto-converts) |
+| Push notifications | Sends them | Receives them |
+| Offline support | None | Offline ack queue |
+| i18n | None | English + Filipino |
+| Dark mode | None | Light/dark/system |
