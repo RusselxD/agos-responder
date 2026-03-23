@@ -1,6 +1,11 @@
 import type { SensorConfig } from "../../types/sensor";
 import apiClient from "./axiosConfig";
 
+export interface WaterLevelTrendPoint {
+    timestamp: string;
+    waterLevelCm: number;
+}
+
 export const sensorAPI = {
     getSensorDeviceConfig: async (
         locationId: number,
@@ -9,5 +14,14 @@ export const sensorAPI = {
             `/sensor-devices/${locationId}/config/by-location`,
         );
         return res.data as SensorConfig;
+    },
+
+    getWaterLevelTrend: async (
+        locationId: number,
+    ): Promise<WaterLevelTrendPoint[]> => {
+        const res = await apiClient.get(
+            `/responder/water-level-trend/${locationId}`,
+        );
+        return res.data as WaterLevelTrendPoint[];
     },
 };

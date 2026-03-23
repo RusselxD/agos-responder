@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import type { NotificationType, Alert } from "../../../types/alert";
 import { alertsAPI } from "../../../lib/api/alert";
@@ -9,11 +9,14 @@ interface AlertsPageContextValue {
     shownAlerts: Alert[] | undefined;
     chosenAlert: Alert | null;
     isFetching: boolean;
+    isLoadingMore: boolean;
+    hasMore: boolean;
     error: string;
     chosenFilter: AlertTypeFilter;
     handleFilterChange: (filter: AlertTypeFilter) => void;
     handleSetChosenAlert: (alertId: string) => void;
     handleCloseAlertDetail: () => void;
+    loadMore: () => void;
     acknowledgeAlert: (
         alertId: string,
         message: string | null,
@@ -36,76 +39,94 @@ export const FILTERS = [
 
 export function AlertsPageProvider({ children }: { children: ReactNode }) {
     const [alerts, setAlerts] = useState<Alert[] | undefined>(undefined);
-    const [shownAlerts, setShownAlerts] = useState<Alert[] | undefined>(
-        undefined,
-    );
-
     const [chosenAlert, setChosenAlert] = useState<Alert | null>(null);
-
     const [chosenFilter, setChosenFilter] = useState<AlertTypeFilter>("all");
-
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(false);
     const [isFetching, setIsFetching] = useState(false);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
     const [error, setError] = useState<string>("");
 
     const { responderId } = useCoreHook();
 
-    const handleFilterChange = (filter: AlertTypeFilter) => {
-        setChosenFilter(filter);
-        if (filter === "all") {
-            setShownAlerts(alerts);
+    const fetchAlerts = useCallback(async (
+        targetPage: number,
+        filter: AlertTypeFilter,
+        append: boolean = false,
+    ) => {
+        if (append) {
+            setIsLoadingMore(true);
         } else {
-            setShownAlerts(alerts?.filter((alert) => alert.type === filter));
+            setIsFetching(true);
         }
-    };
 
-    const handleSetChosenAlert = (alertId: string) => {
+        try {
+            const filterType = filter === "all" ? undefined : filter;
+            const res = await alertsAPI.getAlerts(responderId, targetPage, filterType);
+
+            if (append) {
+                setAlerts((prev) => [...(prev || []), ...res.items]);
+            } else {
+                setAlerts(res.items);
+            }
+            setHasMore(res.hasMore);
+            setError("");
+        } catch {
+            if (!append) {
+                setError("Failed to fetch alerts. Please try again.");
+            }
+        } finally {
+            setIsFetching(false);
+            setIsLoadingMore(false);
+        }
+    }, [responderId]);
+
+    const handleFilterChange = useCallback((filter: AlertTypeFilter) => {
+        setChosenFilter(filter);
+        setPage(1);
+        setAlerts(undefined);
+        fetchAlerts(1, filter);
+    }, [fetchAlerts]);
+
+    const loadMore = useCallback(() => {
+        if (isLoadingMore || !hasMore) return;
+        const nextPage = page + 1;
+        setPage(nextPage);
+        fetchAlerts(nextPage, chosenFilter, true);
+    }, [isLoadingMore, hasMore, page, chosenFilter, fetchAlerts]);
+
+    const handleSetChosenAlert = useCallback((alertId: string) => {
         const alert = alerts?.find((a) => a.id === alertId) || null;
         setChosenAlert(alert);
-    };
+    }, [alerts]);
 
-    const handleCloseAlertDetail = () => {
+    const handleCloseAlertDetail = useCallback(() => {
         setChosenAlert(null);
-    };
+    }, []);
 
-    const acknowledgeAlert = (
+    const acknowledgeAlert = useCallback((
         alertId: string,
         message: string | null,
         acknowledgedAt: string,
     ) => {
-        const oldAlert = alerts?.find((a) => a.id === alertId);
-
-        if (!oldAlert) return;
-
-        const updatedAlert = {
-            ...oldAlert,
-            isAcknowledged: true,
-            acknowledgeMessage: message,
-            acknowledgedAt,
-        };
-
-        const updatedAlerts = alerts?.map((a) =>
-            a.id === alertId ? updatedAlert : a,
+        setAlerts((prev) => {
+            if (!prev) return prev;
+            return prev.map((a) =>
+                a.id === alertId
+                    ? { ...a, isAcknowledged: true, acknowledgeMessage: message, acknowledgedAt }
+                    : a,
+            );
+        });
+        setChosenAlert((prev) =>
+            prev && prev.id === alertId
+                ? { ...prev, isAcknowledged: true, acknowledgeMessage: message, acknowledgedAt }
+                : prev,
         );
-        setChosenAlert(updatedAlert);
-        setAlerts(updatedAlerts);
-        setShownAlerts(updatedAlerts);
-    };
+    }, []);
 
+    // Initial fetch
     useEffect(() => {
-        const fetchAlerts = async () => {
-            setIsFetching(true);
-            try {
-                const res = await alertsAPI.getAlerts(responderId);
-                setAlerts(res);
-                setShownAlerts(res);
-            } catch {
-                setError("Failed to fetch alerts. Please try again.");
-            } finally {
-                setIsFetching(false);
-            }
-        };
-
-        fetchAlerts();
+        fetchAlerts(1, "all");
     }, []);
 
     // Flush queued offline acknowledgements when back online
@@ -119,8 +140,6 @@ export function AlertsPageProvider({ children }: { children: ReactNode }) {
         };
 
         window.addEventListener("online", handleOnline);
-
-        // Also attempt on mount in case we're already online with pending items
         if (navigator.onLine) handleOnline();
 
         return () => window.removeEventListener("online", handleOnline);
@@ -128,17 +147,20 @@ export function AlertsPageProvider({ children }: { children: ReactNode }) {
 
     const contextValue = useMemo(
         () => ({
-            shownAlerts,
+            shownAlerts: alerts,
             isFetching,
+            isLoadingMore,
+            hasMore,
             error,
             chosenFilter,
             chosenAlert,
             handleFilterChange,
             handleSetChosenAlert,
             handleCloseAlertDetail,
+            loadMore,
             acknowledgeAlert,
         }),
-        [shownAlerts, isFetching, error, chosenFilter, chosenAlert],
+        [alerts, isFetching, isLoadingMore, hasMore, error, chosenFilter, chosenAlert, handleFilterChange, handleSetChosenAlert, handleCloseAlertDetail, loadMore, acknowledgeAlert],
     );
 
     return (

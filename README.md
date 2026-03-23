@@ -55,10 +55,10 @@ npm run dev
 
 | Route | Page | Description |
 |-------|------|-------------|
-| `/home` | Home | Dashboard with fusion risk, blockage, water level, weather cards |
-| `/alerts` | Alerts | Alert list with type filters, acknowledgement |
+| `/home` | Home | Dashboard with fusion risk, blockage, water level + 24h sparkline, weather cards |
+| `/alerts` | Alerts | Paginated alert list with server-side type filters, "Load more", acknowledgement |
 | `/me` | Profile | Push notification prefs, language, theme, logout |
-| `/install` | Install Gate | PWA install instructions (Android/iOS) |
+| `/install` | Install Gate | PWA install instructions (Android: prompt API, iOS: step-by-step Safari guide) |
 | `/verify/phone-lookup` | Phone Lookup | Enter phone number to start registration |
 | `/verify/otp-verification` | OTP Verification | Enter OTP to confirm identity |
 
@@ -67,9 +67,10 @@ npm run dev
 1. Responder enters phone number at `/verify/phone-lookup`
 2. Backend sends OTP via SMS (SMSGate Android app)
 3. Responder enters OTP at `/verify/otp-verification`
-4. On success, `responderId` is stored in localStorage
-5. All subsequent API calls use this `responderId`
-6. No JWT — lightweight auth for field use
+4. On success, `responderId` + `responderToken` (JWT, 90-day expiry) stored in localStorage
+5. Axios interceptor injects `Authorization: Bearer {token}` on every request
+6. On 401 response, storage is cleared and user is redirected to `/verify`
+7. AuthGuard checks both `responderId` and `responderToken` exist
 
 ## Push Notifications
 
@@ -84,7 +85,7 @@ The app uses Web Push with VAPID for real-time alerts:
 
 ```
 src/
-├── components/          # AppHeader, BottomNav, common components
+├── components/          # AppHeader, BottomNav, ErrorBoundary, common components
 ├── context/             # Global context providers
 │   ├── CoreContext        # Responder profile + logout
 │   ├── WebSocketContext   # WS connection + message subscription
@@ -95,7 +96,7 @@ src/
 │   ├── NotificationContext    # Unread count + push handling
 │   ├── ThemeContext       # Light/dark/system theme
 │   └── I18nContext        # English/Filipino translations
-├── guards/              # AuthGuard, InstalledGuard
+├── guards/              # AuthGuard (responderId + token), InstalledGuard
 ├── hooks/               # usePushNotifications
 ├── layouts/             # MainLayout, VerifyLayout
 ├── lib/
@@ -110,7 +111,7 @@ src/
 
 | Concern | Admin Frontend | Responders PWA |
 |---------|---------------|----------------|
-| Auth | JWT (access + refresh tokens) | `responderId` in localStorage |
+| Auth | JWT (access + refresh tokens) | JWT responder token (90-day) + `responderId` in localStorage |
 | Field naming | snake_case directly | camelCase (axios auto-converts) |
 | Push notifications | Sends them | Receives them |
 | Offline support | None | Offline ack queue |

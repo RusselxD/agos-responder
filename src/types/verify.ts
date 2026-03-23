@@ -19,4 +19,5 @@ export interface ResponderOTPVerifyResponse {
     success: boolean;
     message: string;
     requiresResend: boolean;
+    responderToken: string | null;
 }

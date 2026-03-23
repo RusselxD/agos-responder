@@ -30,7 +30,8 @@ export function CoreProvider({ children }: { children: ReactNode }) {
     const navigate = useNavigate();
 
     const logOut = useCallback(() => {
-        localStorage.clear();
+        localStorage.removeItem("responderId");
+        localStorage.removeItem("responderToken");
         navigate("/verify");
     }, [navigate]);
 

@@ -15,6 +15,11 @@ export interface Alert {
     acknowledgeMessage: string | null;
 }
 
+export interface AlertPaginatedResponse {
+    items: Alert[];
+    hasMore: boolean;
+}
+
 export interface AcknowledgeNotificationPayload {
     message: string | null;
     deliveryId: string;

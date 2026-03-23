@@ -1,4 +1,5 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
+import ErrorBoundary from "./components/common/ErrorBoundary";
 
 import VerifyLayout from "./layouts/VerifyLayout";
 import PhoneLookup from "./pages/Verify/pages/PhoneLookup";
@@ -30,19 +31,21 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/home",
-                element: <Home />,
+                element: <ErrorBoundary><Home /></ErrorBoundary>,
             },
             {
                 path: "/alerts",
                 element: (
-                    <AlertsPageProvider>
-                        <Alerts />
-                    </AlertsPageProvider>
+                    <ErrorBoundary>
+                        <AlertsPageProvider>
+                            <Alerts />
+                        </AlertsPageProvider>
+                    </ErrorBoundary>
                 ),
             },
             {
                 path: "/me",
-                element: <Profile />,
+                element: <ErrorBoundary><Profile /></ErrorBoundary>,
             },
         ],
     },

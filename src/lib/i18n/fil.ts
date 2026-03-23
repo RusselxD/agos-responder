@@ -18,6 +18,7 @@ const fil: Record<TranslationKey, string> = {
     "home.cmOver": "cm lampas",
     "home.precipitation": "Presipitasyon",
     "home.lastUpdated": "Huling Na-update",
+    "home.waterLevelTrend": "TREND NG LEBEL NG TUBIG (24H)",
 
     // Alerts page
     "alerts.noAlerts": "Walang alerto",
@@ -38,6 +39,8 @@ const fil: Record<TranslationKey, string> = {
     "alerts.critical": "Kritikal",
     "alerts.warning": "Babala",
     "alerts.announcement": "Anunsyo",
+    "alerts.loading": "Naglo-load...",
+    "alerts.loadMore": "Mag-load pa",
 
     // Profile page
     "profile.responderProfile": "PROFILE NG RESPONDER",

@@ -5,6 +5,7 @@ import BlockageStatusCard from "./components/BlockageStatusCard";
 import ConnectionStatusBanner from "./components/ConnectionStatusBanner";
 import FusionAnalysisCard from "./components/FusionAnalysisCard";
 import WaterLevelStatusCard from "./components/WaterLevelStatusCard/WaterLevelStatusCard";
+import WaterLevelSparkline from "./components/WaterLevelSparkline";
 import WeatherConditionCard from "./components/WeatherConditionCard/WeatherConditionCard";
 
 export default function Home() {
@@ -17,6 +18,7 @@ export default function Home() {
             <FusionAnalysisCard />
             <BlockageStatusCard />
             <WaterLevelStatusCard />
+            <WaterLevelSparkline />
             <WeatherConditionCard />
         </Page>
     );

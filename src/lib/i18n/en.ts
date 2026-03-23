@@ -16,6 +16,7 @@ const en = {
     "home.cmOver": "cm over",
     "home.precipitation": "Precipitation",
     "home.lastUpdated": "Last Updated",
+    "home.waterLevelTrend": "WATER LEVEL TREND (24H)",
 
     // Alerts page
     "alerts.noAlerts": "No alerts",
@@ -35,6 +36,8 @@ const en = {
     "alerts.critical": "Critical",
     "alerts.warning": "Warning",
     "alerts.announcement": "Announcement",
+    "alerts.loading": "Loading...",
+    "alerts.loadMore": "Load more",
 
     // Profile page
     "profile.responderProfile": "RESPONDER PROFILE",

@@ -15,9 +15,15 @@ const apiClient = axios.create({
     },
 });
 
-// Request interceptor to convert camelCase to snake_case
+// Request interceptor to convert camelCase to snake_case and inject auth token
 apiClient.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
+        // Inject responder auth token
+        const token = localStorage.getItem("responderToken");
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+
         const skipConversion = (config as ConfigWithSkip).skipKeyConversion;
         if (skipConversion) return config;
 
@@ -36,7 +42,7 @@ apiClient.interceptors.request.use(
     (error) => Promise.reject(error),
 );
 
-// Response interceptor to convert snake_case to camelCase
+// Response interceptor to convert snake_case to camelCase and handle 401
 apiClient.interceptors.response.use(
     (response) => {
         const skipConversion = (response.config as ConfigWithSkip)
@@ -52,6 +58,17 @@ apiClient.interceptors.response.use(
         return response;
     },
     (error) => {
+        // Handle 401 — token expired or invalid, force re-verification
+        if (error?.response?.status === 401) {
+            // Only redirect if we had a token (avoid redirect loops on pre-auth endpoints)
+            if (localStorage.getItem("responderToken")) {
+                localStorage.removeItem("responderId");
+                localStorage.removeItem("responderToken");
+                window.location.href = "/verify";
+                return Promise.reject(error);
+            }
+        }
+
         const skipConversion = (error?.config as ConfigWithSkip | undefined)
             ?.skipResponseKeyConversion;
 

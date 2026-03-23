@@ -6,7 +6,10 @@ interface AuthGuardProps {
 }
 
 export default function AuthGuard({ children }: AuthGuardProps) {
-    if (localStorage.getItem("responderId") === null) {
+    const hasResponderId = localStorage.getItem("responderId") !== null;
+    const hasToken = localStorage.getItem("responderToken") !== null;
+
+    if (!hasResponderId || !hasToken) {
         return <Navigate to="/verify" replace />;
     }
 

@@ -41,6 +41,9 @@ export default function OTPVerification() {
 
             if (res.success) {
                 localStorage.setItem("responderId", responderDetails.responderId);
+                if (res.responderToken) {
+                    localStorage.setItem("responderToken", res.responderToken);
+                }
                 navigate(`/home`);
             } else {
                 setOtpError(
