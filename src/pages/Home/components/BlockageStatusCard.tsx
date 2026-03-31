@@ -1,4 +1,5 @@
 import Card from "../../../components/common/Card";
+import ErrorCard from "../../../components/common/ErrorCard";
 
 import { useWaterwayContext } from "../../../context/BlockageContext";
 import { useI18n } from "../../../context/I18nContext";
@@ -79,11 +80,15 @@ const ProgressBar = () => {
 };
 
 export default function BlockageStatusCard() {
-    const { isFetching, status } = useWaterwayContext();
+    const { isFetching, status, error } = useWaterwayContext();
     const { t } = useI18n();
 
     if (isFetching && !status) {
         return <div className="skeleton h-36 w-full rounded-xl" />;
+    }
+
+    if (error) {
+        return <ErrorCard message={error} />;
     }
 
     return (

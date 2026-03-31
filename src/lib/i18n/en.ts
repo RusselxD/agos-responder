@@ -17,6 +17,7 @@ const en = {
     "home.precipitation": "Precipitation",
     "home.lastUpdated": "Last Updated",
     "home.waterLevelTrend": "WATER LEVEL TREND (24H)",
+    "home.errorLoadingData": "Error Loading Data",
 
     // Alerts page
     "alerts.noAlerts": "No alerts",

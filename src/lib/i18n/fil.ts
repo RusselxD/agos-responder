@@ -19,6 +19,7 @@ const fil: Record<TranslationKey, string> = {
     "home.precipitation": "Presipitasyon",
     "home.lastUpdated": "Huling Na-update",
     "home.waterLevelTrend": "TREND NG LEBEL NG TUBIG (24H)",
+    "home.errorLoadingData": "Hindi Ma-load ang Data",
 
     // Alerts page
     "alerts.noAlerts": "Walang alerto",

@@ -3,6 +3,7 @@ import { useWeather } from "../../../../context/WeatherContext";
 import { getTimeAgo } from "../../../../lib/utils/formatter";
 import type { WeatherData } from "../../../../types/weather";
 import Card from "../../../../components/common/Card";
+import ErrorCard from "../../../../components/common/ErrorCard";
 import { useI18n } from "../../../../context/I18nContext";
 
 type WeatherProps = {
@@ -79,7 +80,7 @@ export default function WeatherConditionCard() {
     }
 
     if (error) {
-        return null;
+        return <ErrorCard message={error} />;
     }
 
     return (

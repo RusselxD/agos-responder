@@ -7,6 +7,7 @@ import {
 import { useFusionAnalysis } from "../../../context/FusionAnalysisContext";
 import { getMostRecentDate, getTimeAgo } from "../../../lib/utils/formatter";
 import Card from "../../../components/common/Card";
+import ErrorCard from "../../../components/common/ErrorCard";
 
 interface TierConfig {
     [key: string]: TierDetails;
@@ -36,6 +37,12 @@ const tierConfig: TierConfig = {
         color: "text-red-600 dark:text-red-400",
         bgColor: "!bg-red-50 dark:!bg-red-950/50",
         borderColor: "border-red-400 dark:border-red-700",
+        icon: AlertCircle,
+    },
+    unavailable: {
+        color: "text-gray-600 dark:text-gray-400",
+        bgColor: "!bg-gray-50 dark:!bg-slate-800",
+        borderColor: "border-gray-300 dark:border-slate-600",
         icon: AlertCircle,
     },
     "n/a": {
@@ -91,7 +98,7 @@ export default function FusionAnalysisCard() {
         ] || tierConfig["n/a"];
 
     if (error) {
-        return null;
+        return <ErrorCard message={error} />;
     }
 
     if (isFetching && !fusionAnalysis) {
