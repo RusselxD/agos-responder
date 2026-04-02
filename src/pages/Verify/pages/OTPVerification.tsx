@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { isAxiosError } from "axios";
 import Container from "../components/Container";
 import InputOTPField from "../components/InputOTPField";
 import { formatPHNumber } from "../../../lib/utils/phone";
@@ -53,8 +54,20 @@ export default function OTPVerification() {
                 setOtp(new Array(6).fill(""));
                 inputRefs.current?.[0]?.focus();
             }
-        } catch {
-            setOtpError("Something went wrong. Please try again.");
+        } catch (err) {
+            if (isAxiosError(err)) {
+                if (err.response?.status === 429) {
+                    setOtpError("Too many attempts. Please wait a few minutes before trying again.");
+                } else if (err.code === "ECONNABORTED" || !err.response) {
+                    setOtpError("Network error. Please check your connection and try again.");
+                } else {
+                    setOtpError(
+                        err.response?.data?.detail || err.response?.data?.message || "Something went wrong. Please try again.",
+                    );
+                }
+            } else {
+                setOtpError("Something went wrong. Please try again.");
+            }
             setOtp(new Array(6).fill(""));
             inputRefs.current?.[0]?.focus();
         } finally {

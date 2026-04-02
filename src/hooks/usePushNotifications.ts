@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import apiClient from "../lib/api/axiosConfig";
 import { useCoreHook } from "../context/CoreContext";
 
@@ -13,44 +13,53 @@ function urlBase64ToUint8Array(base64String: string) {
 
 export function usePushNotifications() {
     const { responderId } = useCoreHook();
+    const [pushError, setPushError] = useState<string | null>(null);
 
     useEffect(() => {
         const subscribe = async () => {
             if (!responderId) return;
 
-            // 1. check browser support
-            if (!("serviceWorker" in navigator) || !("PushManager" in window))
-                return;
-
-            // 2. ask permission
-            const permission = await Notification.requestPermission();
-            if (permission !== "granted") return;
-
-            // 3. register sw and wait until ready
-            await navigator.serviceWorker.register("/sw.js");
-            const sw = await navigator.serviceWorker.ready;
-
-            // 4. get vapid public key from backend
-            const { data } = await apiClient.get("/push/vapid-public-key");
-            const publicKey = data.publicKey ?? data.public_key;
-            if (!publicKey || typeof publicKey !== "string") {
-                console.error("Push: missing VAPID public key from API");
+            if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+                setPushError("Push notifications are not supported on this device.");
                 return;
             }
 
-            // 5. subscribe
-            const subscription = await sw.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: urlBase64ToUint8Array(publicKey),
-            });
+            const permission = await Notification.requestPermission();
+            if (permission !== "granted") {
+                setPushError("Push notifications are blocked. Enable them in your browser settings to receive critical alerts.");
+                return;
+            }
 
-            // 6. save subscription to backend
-            await apiClient.post("/push/subscribe", {
-                ...subscription.toJSON(),
-                responder_id: responderId,
-            });
+            try {
+                await navigator.serviceWorker.register("/sw.js");
+                const sw = await navigator.serviceWorker.ready;
+
+                const { data } = await apiClient.get("/push/vapid-public-key");
+                const publicKey = data.publicKey ?? data.public_key;
+                if (!publicKey || typeof publicKey !== "string") {
+                    setPushError("Failed to configure push notifications. Please try again later.");
+                    return;
+                }
+
+                const subscription = await sw.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: urlBase64ToUint8Array(publicKey),
+                });
+
+                await apiClient.post("/push/subscribe", {
+                    ...subscription.toJSON(),
+                    responder_id: responderId,
+                });
+
+                setPushError(null); // Success
+            } catch (err) {
+                if (import.meta.env.DEV) console.error("Push subscription failed:", err);
+                setPushError("Failed to set up push notifications. Please refresh and try again.");
+            }
         };
 
         subscribe();
     }, [responderId]);
+
+    return { pushError };
 }

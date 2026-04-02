@@ -1,5 +1,35 @@
 type AlertSeverity = "critical" | "warning" | "blockage" | "announcement";
 
+// ── iOS Safari audio context unlock ──────────────────────────────────
+// The Web Audio API requires a user gesture on iOS Safari to unlock the
+// AudioContext. We play a silent buffer on the first interaction so that
+// subsequent programmatic playTone() calls work without a gesture.
+let audioContextUnlocked = false;
+
+function unlockAudioContext() {
+    if (audioContextUnlocked) return;
+    try {
+        const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const buffer = ctx.createBuffer(1, 1, 22050);
+        const source = ctx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(ctx.destination);
+        source.start(0);
+        audioContextUnlocked = true;
+        // Remove listeners once unlocked
+        document.removeEventListener("touchstart", unlockAudioContext);
+        document.removeEventListener("click", unlockAudioContext);
+    } catch {
+        // Ignore — will retry on next interaction
+    }
+}
+
+// Register unlock listeners
+if (typeof document !== "undefined") {
+    document.addEventListener("touchstart", unlockAudioContext, { once: false });
+    document.addEventListener("click", unlockAudioContext, { once: false });
+}
+
 // Vibration patterns (in ms): [vibrate, pause, vibrate, ...]
 const vibrationPatterns: Record<AlertSeverity, number[]> = {
     critical: [200, 100, 200, 100, 400],

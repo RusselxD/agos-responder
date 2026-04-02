@@ -21,6 +21,7 @@ type ConnectionStatus = "connecting" | "connected" | "disconnected";
 interface WSContextValue {
     isConnected: boolean;
     connectionStatus: ConnectionStatus;
+    lastMessageAt: Date | null;
     reconnect: () => void;
     subscribe: (type: string, callback: (data: any) => void) => () => void;
 }
@@ -31,6 +32,7 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
     const socketRef = useRef<WebSocket | null>(null);
     const [connectionStatus, setConnectionStatus] =
         useState<ConnectionStatus>("disconnected");
+    const [lastMessageAt, setLastMessageAt] = useState<Date | null>(null);
     const { responder } = useCoreHook();
 
     // Track whether the component is mounted to prevent reconnect after unmount
@@ -67,7 +69,7 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
         socketRef.current = ws;
 
         ws.onopen = () => {
-            console.log("WebSocket connected");
+            if (import.meta.env.DEV) console.log("WebSocket connected");
             setConnectionStatus("connected");
             retryCountRef.current = 0; // Reset backoff on successful connect
         };
@@ -75,28 +77,29 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
         ws.onmessage = (e) => {
             try {
                 const message: WebSocketMessage = JSON.parse(e.data);
-                console.log("Message received: ", message);
+                if (import.meta.env.DEV) console.log("Message received: ", message);
+                setLastMessageAt(new Date());
 
                 const callbacks = listenersRef.current.get(message.type);
                 if (callbacks) {
                     callbacks.forEach((callback) => callback(message.data));
                 }
             } catch (error) {
-                console.error("Failed to parse WebSocket message:", error);
+                if (import.meta.env.DEV) console.error("Failed to parse WebSocket message:", error);
             }
         };
 
         ws.onclose = () => {
-            console.log("WebSocket disconnected");
+            if (import.meta.env.DEV) console.log("WebSocket disconnected");
             setConnectionStatus("disconnected");
 
             // Auto-reconnect with exponential backoff unless intentionally closed
-            if (!intentionalCloseRef.current && mountedRef.current) {
+            if (!intentionalCloseRef.current && mountedRef.current && navigator.onLine) {
                 const delay = Math.min(
                     BASE_BACKOFF_MS * 2 ** retryCountRef.current,
                     MAX_BACKOFF_MS,
                 );
-                console.log(`Reconnecting in ${delay}ms...`);
+                if (import.meta.env.DEV) console.log(`Reconnecting in ${delay}ms...`);
                 retryTimeoutRef.current = setTimeout(() => {
                     retryCountRef.current += 1;
                     connect();
@@ -105,7 +108,7 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
         };
 
         ws.onerror = (error) => {
-            console.error("WebSocket error:", error);
+            if (import.meta.env.DEV) console.error("WebSocket error:", error);
         };
     }, [responder]);
 
@@ -123,6 +126,49 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
             socketRef.current?.close();
         };
     }, [connect]);
+
+    // Reconnect when app becomes visible again
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === "visible" && connectionStatus === "disconnected" && mountedRef.current) {
+                intentionalCloseRef.current = false;
+                retryCountRef.current = 0;
+                if (retryTimeoutRef.current) {
+                    clearTimeout(retryTimeoutRef.current);
+                    retryTimeoutRef.current = null;
+                }
+                connect();
+            }
+        };
+
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+        return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+    }, [connectionStatus, connect]);
+
+    // Pause reconnection when offline, resume when online
+    useEffect(() => {
+        const handleOnline = () => {
+            if (connectionStatus === "disconnected" && mountedRef.current) {
+                retryCountRef.current = 0;
+                connect();
+            }
+        };
+
+        const handleOffline = () => {
+            // Clear pending reconnect attempts — no point reconnecting while offline
+            if (retryTimeoutRef.current) {
+                clearTimeout(retryTimeoutRef.current);
+                retryTimeoutRef.current = null;
+            }
+        };
+
+        window.addEventListener("online", handleOnline);
+        window.addEventListener("offline", handleOffline);
+        return () => {
+            window.removeEventListener("online", handleOnline);
+            window.removeEventListener("offline", handleOffline);
+        };
+    }, [connectionStatus, connect]);
 
     // Manual reconnect: reset backoff and connect immediately
     const reconnect = useCallback(() => {
@@ -162,10 +208,11 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
         () => ({
             isConnected,
             connectionStatus,
+            lastMessageAt,
             reconnect,
             subscribe,
         }),
-        [isConnected, connectionStatus, reconnect, subscribe],
+        [isConnected, connectionStatus, lastMessageAt, reconnect, subscribe],
     );
 
     return (

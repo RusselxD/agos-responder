@@ -36,20 +36,20 @@ export const capitalizeFirstLetter = (str: string): string => {
     return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-export const formatDate = (dateString: string) => {
+export const formatDate = (dateString: string, locale: string = "en-US") => {
     const date = new Date(dateString);
 
-    return date.toLocaleDateString("en-US", {
+    return date.toLocaleDateString(locale, {
         month: "short",
         day: "numeric",
         year: "numeric",
     });
 };
 
-export const formatTimestamp = (timestampString: string) => {
+export const formatTimestamp = (timestampString: string, locale: string = "en-US") => {
     const date = new Date(timestampString);
 
-    return date.toLocaleString("en-US", {
+    return date.toLocaleString(locale, {
         month: "short",
         day: "numeric",
         year: "numeric",

@@ -2,6 +2,8 @@ import axios, { type InternalAxiosRequestConfig } from "axios";
 import camelcaseKeys from "camelcase-keys";
 import snakecaseKeys from "snakecase-keys";
 
+let isRedirecting = false;
+
 type ConfigWithSkip = InternalAxiosRequestConfig & {
     skipKeyConversion?: boolean;
     skipResponseKeyConversion?: boolean;
@@ -62,6 +64,8 @@ apiClient.interceptors.response.use(
         if (error?.response?.status === 401) {
             // Only redirect if we had a token (avoid redirect loops on pre-auth endpoints)
             if (localStorage.getItem("responderToken")) {
+                if (isRedirecting) return Promise.reject(error);
+                isRedirecting = true;
                 localStorage.removeItem("responderId");
                 localStorage.removeItem("responderToken");
                 window.location.href = "/verify";

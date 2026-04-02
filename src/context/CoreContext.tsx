@@ -32,6 +32,7 @@ export function CoreProvider({ children }: { children: ReactNode }) {
     const logOut = useCallback(() => {
         localStorage.removeItem("responderId");
         localStorage.removeItem("responderToken");
+        localStorage.removeItem("offline-ack-queue");
         navigate("/verify");
     }, [navigate]);
 

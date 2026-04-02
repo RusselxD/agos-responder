@@ -39,7 +39,7 @@ export default function BottomNav() {
     const { t } = useI18n();
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 flex items-center justify-between py-1 px-10 bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-700">
+        <div className="fixed bottom-0 left-0 right-0 flex items-center justify-between py-1 pb-[env(safe-area-inset-bottom)] px-10 bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-700">
             {tabs.map((tab) => {
                 return (
                     <NavLink

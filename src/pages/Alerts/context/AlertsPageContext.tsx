@@ -82,6 +82,7 @@ export function AlertsPageProvider({ children }: { children: ReactNode }) {
     }, [responderId]);
 
     const handleFilterChange = useCallback((filter: AlertTypeFilter) => {
+        window.scrollTo(0, 0);
         setChosenFilter(filter);
         setPage(1);
         setAlerts(undefined);

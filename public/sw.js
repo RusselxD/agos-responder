@@ -1,7 +1,12 @@
 import { cleanupOutdatedCaches, precacheAndRoute } from "workbox-precaching";
 import { clientsClaim } from "workbox-core";
 
-self.skipWaiting();
+// Skip waiting only when the client explicitly requests it (prompt update flow)
+self.addEventListener("message", (event) => {
+    if (event.data && event.data.type === "SKIP_WAITING") {
+        self.skipWaiting();
+    }
+});
 clientsClaim();
 
 cleanupOutdatedCaches();
