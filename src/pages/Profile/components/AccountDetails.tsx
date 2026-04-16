@@ -31,11 +31,11 @@ export default function AccountDetails() {
             <Card className="!p-0">
                 <Details
                     label={t("profile.registered")}
-                    value={formatDate(responder?.createdAt || "") || "N/A"}
+                    value={responder?.createdAt ? formatDate(responder.createdAt) : "N/A"}
                 />
                 <Details
                     label={t("profile.activated")}
-                    value={formatDate(responder?.activatedAt || "") || "N/A"}
+                    value={responder?.activatedAt ? formatDate(responder.activatedAt) : "N/A"}
                 />
                 <Details
                     label={t("profile.assignedSite")}

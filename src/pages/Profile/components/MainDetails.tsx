@@ -34,17 +34,17 @@ export default function MainDetails() {
                 </div>
                 <div className="flex justify-between items-end mt-2">
                     <div className="space-y-1">
-                        <h2 className="font-bold text-2xl dark:text-white">{`${responder?.firstName} ${responder?.lastName || ""}`}</h2>
+                        <h2 className="font-bold text-2xl dark:text-white">{`${responder?.firstName || ""} ${responder?.lastName || ""}`.trim() || "Unknown"}</h2>
                         <div className="flex items-center gap-2">
                             <Phone className="w-4 h-4 dark:text-gray-300" />
                             <p className="text-sm dark:text-gray-300">
-                                {formatPHNumber(responder?.phoneNumber || "")}
+                                {responder?.phoneNumber ? formatPHNumber(responder.phoneNumber) : "N/A"}
                             </p>
                         </div>
                     </div>
                     <p className="text-xs font-medium bg-accent/10 rounded-full px-2 py-1 w-fit text-accent ">
                         <span>ID: </span>
-                        <span>{getLastChunkOfId(responder?.id || "")}</span>
+                        <span>{responder?.id ? getLastChunkOfId(responder.id) : "N/A"}</span>
                     </p>
                 </div>
             </div>

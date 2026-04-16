@@ -9,7 +9,7 @@ import { useWaterLevel } from "../../../../../context/WaterLevelContext";
 
 const AlertCategory = () => {
     const { sensorData } = useWaterLevel();
-    const alert = sensorData?.alert.level || "";
+    const alert = sensorData?.alert?.level || "unknown";
 
     const getAlertClasses = (alert: string) => {
         switch (alert) {
@@ -90,7 +90,7 @@ const GaugeDisplay = () => {
 
     // Water fill scales to 80% max (where critical line is)
     const waterHeight =
-        (sensorData.alert.percentage_of_critical / 100) * criticalLinePosition;
+        ((sensorData.alert.percentage_of_critical ?? 0) / 100) * criticalLinePosition;
 
     return (
         <div className="water-gauge">
@@ -139,7 +139,7 @@ export default function MainDisplay() {
                     <p>
                         <span className="text-2xl font-semibold dark:text-white">
                             {`${(
-                                sensorData?.water_level.current_cm || 0
+                                sensorData?.water_level.current_cm ?? 0
                             ).toFixed(1)} `}
                         </span>
                         <span className="dark:text-gray-300">cm</span>
@@ -149,7 +149,7 @@ export default function MainDisplay() {
                 </div>
             </div>
             <span className="text-[0.800rem] text-gray-900 dark:text-gray-300">
-                {getTimeAgo(sensorData?.timestamp || "")}
+                {sensorData?.timestamp ? getTimeAgo(sensorData.timestamp) : "No data"}
             </span>
         </div>
     );

@@ -10,8 +10,11 @@ export const getMostRecentDate = (dates: string[]): string => {
 };
 
 export const getTimeAgo = (timestamp: string): string => {
+    if (!timestamp) return "No data";
+    const date = new Date(timestamp);
+    if (isNaN(date.getTime())) return "Invalid date";
     const seconds = Math.floor(
-        (new Date().getTime() - new Date(timestamp).getTime()) / 1000,
+        (new Date().getTime() - date.getTime()) / 1000,
     );
     if (seconds < 60) return "Just now";
 
@@ -37,7 +40,9 @@ export const capitalizeFirstLetter = (str: string): string => {
 };
 
 export const formatDate = (dateString: string, locale: string = "en-US") => {
+    if (!dateString) return "N/A";
     const date = new Date(dateString);
+    if (isNaN(date.getTime())) return "N/A";
 
     return date.toLocaleDateString(locale, {
         month: "short",
@@ -47,7 +52,9 @@ export const formatDate = (dateString: string, locale: string = "en-US") => {
 };
 
 export const formatTimestamp = (timestampString: string, locale: string = "en-US") => {
+    if (!timestampString) return "N/A";
     const date = new Date(timestampString);
+    if (isNaN(date.getTime())) return "N/A";
 
     return date.toLocaleString(locale, {
         month: "short",

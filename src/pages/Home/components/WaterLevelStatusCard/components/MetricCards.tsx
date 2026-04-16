@@ -33,7 +33,7 @@ export default function MetricCards() {
                 return {
                     title: t("home.toWarning"),
                     data: (
-                        sensorData?.alert.distance_to_warning_cm || 0
+                        sensorData?.alert.distance_to_warning_cm ?? 0
                     ).toFixed(1),
                     desc: t("home.cmRemaining"),
                 };
@@ -41,7 +41,7 @@ export default function MetricCards() {
                 return {
                     title: t("home.toCritical"),
                     data: (
-                        sensorData?.alert.distance_to_critical_cm || 0
+                        sensorData?.alert.distance_to_critical_cm ?? 0
                     ).toFixed(1),
                     desc: t("home.cmRemaining"),
                 };
@@ -49,7 +49,7 @@ export default function MetricCards() {
                 return {
                     title: t("home.aboveCritical"),
                     data: (
-                        sensorData?.alert.distance_from_critical_cm || 0
+                        sensorData?.alert.distance_from_critical_cm ?? 0
                     ).toFixed(1),
                     desc: t("home.cmOver"),
                 };
@@ -57,7 +57,7 @@ export default function MetricCards() {
                 return {
                     title: t("home.toWarning"),
                     data: (
-                        sensorData?.alert.distance_to_warning_cm || 0
+                        sensorData?.alert.distance_to_warning_cm ?? 0
                     ).toFixed(1),
                     desc: t("home.cmRemaining"),
                 };
@@ -66,7 +66,7 @@ export default function MetricCards() {
 
     const titleAndDesc = getTitleAndDesc();
 
-    const changeRateData = sensorData?.water_level.change_rate || 0;
+    const changeRateData = sensorData?.water_level.change_rate ?? 0;
     const changeRateDisplay =
         changeRateData > 0 ? `+${changeRateData}` : `${changeRateData}`;
 

@@ -66,7 +66,7 @@ const TimeAgoDisplay = () => {
 
     return (
         <p className="text-gray-600 dark:text-gray-400 text-xs absolute bottom-2 left-2.5">
-            {getTimeAgo(mostRecent)}
+            {mostRecent ? getTimeAgo(mostRecent) : "No data"}
         </p>
     );
 };

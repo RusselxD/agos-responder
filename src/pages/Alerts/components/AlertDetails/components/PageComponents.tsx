@@ -42,7 +42,7 @@ export const NotificationDetails = ({
         <div className="bg-gray-100 dark:bg-slate-700 p-3 rounded-xl flex flex-col gap-1.5">
             <p className="text-sm dark:text-gray-200">{message}</p>
             <span className="text-[0.800rem] text-gray-500 dark:text-gray-400">
-                {formatDate(timestamp)}
+                {timestamp ? formatDate(timestamp) : "N/A"}
             </span>
         </div>
     );
@@ -59,20 +59,20 @@ export const AcknowledgeNotification = () => {
     const { t } = useI18n();
 
     const handleSubmitAcknowledgement = async () => {
-        if (isSubmitting) return;
+        if (isSubmitting || !chosenAlert || !responderId) return;
 
         try {
             setIsSubmitting(true);
 
             const payload: AcknowledgeNotificationPayload = {
                 message: message || null,
-                responderId: responderId!,
-                deliveryId: chosenAlert!.id,
+                responderId: responderId,
+                deliveryId: chosenAlert.id,
             };
             const res = await alertsAPI.acknowledgeNotification(payload);
 
             acknowledgeAlert(
-                chosenAlert!.id,
+                chosenAlert.id,
                 res.acknowledgeMessage,
                 res.acknowledgedAt,
             );
@@ -81,12 +81,12 @@ export const AcknowledgeNotification = () => {
             // Queue for retry when back online
             enqueueAcknowledgement({
                 message: message || null,
-                responderId: responderId!,
-                deliveryId: chosenAlert!.id,
+                responderId: responderId,
+                deliveryId: chosenAlert.id,
             });
             // Optimistically mark as acknowledged locally
             acknowledgeAlert(
-                chosenAlert!.id,
+                chosenAlert.id,
                 message || null,
                 new Date().toISOString(),
             );
@@ -135,7 +135,7 @@ export const AcknowledgementDetails = ({
                 <div className="flex flex-col">
                     <span className="text-sm font-medium">{t("alerts.acknowledged")}</span>
                     <span className="text-[0.800rem]">
-                        {formatDate(acknowledgedAt)}
+                        {acknowledgedAt ? formatDate(acknowledgedAt) : "N/A"}
                     </span>
                 </div>
             </div>
