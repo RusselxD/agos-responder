@@ -28,7 +28,7 @@ Vibration patterns:
 
 Context API only. Provider nesting in `MainLayout`:
 ```
-CoreProvider → CoreGate → WebSocketProvider → WaterLevelProvider → BlockageProvider → WeatherProvider → FusionAnalysisProvider → NotificationProvider
+CoreProvider → CoreGate → WebSocketProvider → FusionAnalysisProvider → BlockageProvider → WaterLevelProvider → WeatherProvider → NotificationProvider
 ```
 
 ### Contexts
@@ -52,9 +52,11 @@ CoreProvider → CoreGate → WebSocketProvider → WaterLevelProvider → Block
 | `AlertsPageContext` | `useAlertsPageHook()` | Alert list, filtering, chosen alert, offline queue flush |
 | `VerifyPageContext` | `useVerify()` | Temporary responder data during OTP flow |
 
+`CoreGate` waits for the authenticated responder profile before opening the WebSocket connection.
+
 ## Authentication
 
-No JWT — lightweight auth using `responderId` in localStorage.
+Responder authentication uses a JWT issued after OTP verification. The app keeps both `responderId` and `responderToken` in `localStorage`.
 
 ### Flow
 
@@ -62,16 +64,16 @@ No JWT — lightweight auth using `responderId` in localStorage.
 Phone Lookup ──POST /responder/for-approval──► Backend sends OTP via SMS
      │
      ▼
-OTP Verification ──POST /responder/verify-otp──► Success
+OTP Verification ──POST /responder/verify-otp──► Success + responder_token
      │
      ▼
-Store responderId in localStorage ──► Navigate to /home
+Store responderId + responderToken in localStorage ──► Navigate to /home
 ```
 
 ### Guards
 
-- **`AuthGuard`** — Checks `localStorage.responderId`. Missing → redirect to `/verify`.
-- **`InstalledGuard`** — PWA installation check (currently disabled/commented out).
+- **`AuthGuard`** — Requires both `localStorage.responderId` and `localStorage.responderToken`. Missing either one redirects to `/verify`.
+- **`InstalledGuard`** — Wraps app/verify routes and currently allows the route through while install enforcement is disabled in code.
 
 ## API Layer (`src/lib/api/`)
 
@@ -138,7 +140,7 @@ Responder settings:
 Two-step OTP authentication:
 
 1. **PhoneLookup** — Phone number input with normalization (`normalizePhoneNumber()` supports 09xx, 639xx, 9xx formats). Calls API, stores responder preview in context.
-2. **OTPVerification** — 6-digit input. On success: stores `responderId` in localStorage. Handles `requiresResend` flag. Resend button.
+2. **OTPVerification** — 6-digit input. On success: stores `responderId` and `responderToken` in localStorage. Handles `requiresResend` flag. Resend button.
 
 ### InstallGate
 PWA install prompt:
@@ -154,7 +156,7 @@ PWA install prompt:
 2. Request browser notification permission
 3. `GET /push/vapid-public-key` → get VAPID key
 4. `pushManager.subscribe()` → get push subscription
-5. `POST /push/subscribe` → send subscription + responderId to backend
+5. `POST /push/subscribe` → send subscription + responderId to backend with responder JWT authorization
 
 ### Notification Reception
 
@@ -209,13 +211,13 @@ Coverage: All user-facing text in Home, Alerts, Profile, Verify pages and naviga
 
 | Concern | Admin Frontend | Responders PWA |
 |---------|---------------|----------------|
-| Auth | JWT (access + refresh tokens) | `responderId` in localStorage |
+| Auth | JWT (access + refresh tokens) | JWT responder token (90-day) + `responderId` in localStorage |
 | Field naming | snake_case directly | camelCase (axios auto-converts) |
 | Target | Desktop browser | Mobile PWA |
 | Push notifications | Sends them | Receives them |
 | Offline support | None | Offline ack queue |
 | i18n | None | English + Filipino |
 | Dark mode | None | Light / Dark / System |
-| Video stream | HLS via VideoContext | None |
+| Camera feed | Live camera frames via `VideoContext` | None |
 | AI analysis | SSE streaming | None |
 | Data export | Excel export | None |

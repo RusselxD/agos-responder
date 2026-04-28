@@ -29,7 +29,7 @@ npm install
 
 # Create .env file
 echo 'VITE_API_BASE_URL=http://localhost:8000' > .env
-echo 'VITE_API_WS_URL=ws://localhost:8000/ws' >> .env
+echo 'VITE_API_WS_URL=ws://localhost:8000' >> .env
 
 # Start dev server
 npm run dev
@@ -40,7 +40,7 @@ npm run dev
 | Variable | Description |
 |----------|-------------|
 | `VITE_API_BASE_URL` | Backend API URL (e.g., `http://localhost:8000`) |
-| `VITE_API_WS_URL` | Backend WebSocket URL (e.g., `ws://localhost:8000/ws`) |
+| `VITE_API_WS_URL` | Backend WebSocket origin (e.g., `ws://localhost:8000`; app appends `/ws`) |
 
 ## Scripts
 
