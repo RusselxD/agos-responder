@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 import type { NotificationType } from "../../../types/alert";
-import { TriangleAlert, CircleAlert, Ban, Megaphone } from "lucide-react";
+import { TriangleAlert, CircleAlert, Ban, Megaphone, Wrench } from "lucide-react";
 
 export const getIcon = (type: NotificationType): ReactElement | null => {
     switch (type) {
@@ -12,6 +12,8 @@ export const getIcon = (type: NotificationType): ReactElement | null => {
             return <Ban className="w-4 h-4" />;
         case "announcement":
             return <Megaphone className="w-4 h-4" />;
+        case "maintenance":
+            return <Wrench className="w-4 h-4" />;
         default:
             return null;
     }
@@ -27,6 +29,8 @@ export const getBadgeColor = (type: NotificationType): string => {
             return "bg-gray-100 text-gray-800 border-gray-400 dark:bg-slate-700 dark:text-gray-300 dark:border-slate-500";
         case "announcement":
             return "bg-blue-100 text-blue-800 border-blue-400 dark:bg-blue-950/50 dark:text-blue-300 dark:border-blue-700";
+        case "maintenance":
+            return "bg-amber-100 text-amber-800 border-amber-400 dark:bg-amber-950/50 dark:text-amber-300 dark:border-amber-700";
         default:
             return "";
     }
@@ -42,6 +46,8 @@ export const getContainerBorderColor = (type: NotificationType): string => {
             return "border-gray-600";
         case "announcement":
             return "border-blue-600";
+        case "maintenance":
+            return "border-amber-600";
         default:
             return "";
     }

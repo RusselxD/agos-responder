@@ -4,17 +4,28 @@ export interface FusionAnalysisSummaryResponse extends SummaryResponse {
     fusion_analysis: FusionAnalysisData;
 }
 
+export const AnomalyType = {
+    OBSTRUCTED_SENSOR: "OBSTRUCTED_SENSOR",
+    BLIND_CAMERA: "BLIND_CAMERA",
+    STALE_SENSOR: "STALE_SENSOR",
+    GHOST_FLOOD: "GHOST_FLOOD",
+    CONFIDENCE_THRASHING: "CONFIDENCE_THRASHING",
+} as const;
+
+export type AnomalyType = typeof AnomalyType[keyof typeof AnomalyType];
+
 export interface FusionAnalysisData {
     fusion_data: FusionData;
-    blockage_status: BlockageStatus;
-    water_level_status: WaterLevelStatus;
-    weather_status: WeatherStatus;
+    blockage_status: BlockageStatus | null;
+    water_level_status: WaterLevelStatus | null;
+    weather_status: WeatherStatus | null;
 }
 
 interface FusionData {
     alert_name: string;
     combined_risk_score: number;
     triggered_conditions: string[];
+    anomalies: AnomalyType[];
 }
 
 interface StatusBase {

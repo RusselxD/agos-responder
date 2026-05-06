@@ -2,7 +2,8 @@ export type NotificationType =
     | "warning"
     | "critical"
     | "blockage"
-    | "announcement";
+    | "announcement"
+    | "maintenance";
 
 export interface Alert {
     id: string;
