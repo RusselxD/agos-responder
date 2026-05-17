@@ -31,7 +31,10 @@ export default function DrawerContainer({
             document.body.style.overflow = "unset";
             document.removeEventListener("keydown", handleKeyDown);
         };
-    }, [handleCloseDrawer]);
+        // isOpen must be a dependency: the drawer is always mounted (portal)
+        // and only toggled via CSS, so the effect must re-run on open/close
+        // for the scroll lock and Escape handler to engage.
+    }, [handleCloseDrawer, isOpen]);
 
     return createPortal(
         <div

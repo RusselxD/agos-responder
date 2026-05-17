@@ -30,22 +30,37 @@ export function enqueueAcknowledgement(
     }
 }
 
-export async function flushQueue(): Promise<number> {
-    const queue = getQueue();
-    if (queue.length === 0) return 0;
+let flushPromise: Promise<number> | null = null;
 
-    let synced = 0;
-    const remaining: AcknowledgeNotificationPayload[] = [];
+export function flushQueue(): Promise<number> {
+    // Guard against concurrent runs: two rapid "online" events would otherwise
+    // each read the same queue snapshot (it is only cleared after all awaits
+    // finish) and double-submit every queued acknowledgement.
+    if (flushPromise) return flushPromise;
 
-    for (const payload of queue) {
+    flushPromise = (async () => {
         try {
-            await alertsAPI.acknowledgeNotification(payload);
-            synced++;
-        } catch {
-            remaining.push(payload);
-        }
-    }
+            const queue = getQueue();
+            if (queue.length === 0) return 0;
 
-    saveQueue(remaining);
-    return synced;
+            let synced = 0;
+            const remaining: AcknowledgeNotificationPayload[] = [];
+
+            for (const payload of queue) {
+                try {
+                    await alertsAPI.acknowledgeNotification(payload);
+                    synced++;
+                } catch {
+                    remaining.push(payload);
+                }
+            }
+
+            saveQueue(remaining);
+            return synced;
+        } finally {
+            flushPromise = null;
+        }
+    })();
+
+    return flushPromise;
 }

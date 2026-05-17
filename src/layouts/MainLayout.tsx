@@ -6,6 +6,7 @@ import { FusionAnalysisProvider } from "../context/FusionAnalysisContext";
 import { BlockageProvider } from "../context/BlockageContext";
 import { WaterLevelProvider } from "../context/WaterLevelContext";
 import AppHeader from "../components/AppHeader";
+import PushNotificationManager from "../components/PushNotificationManager";
 import { WeatherProvider } from "../context/WeatherContext";
 import { NotificationProvider } from "../context/NotificationContext";
 
@@ -36,6 +37,7 @@ export default function MainLayout() {
                                         <div>
                                             <AppHeader />
                                             <div className="min-h-[100dvh] bg-background dark:bg-background-dark pt-14 pb-16">
+                                                <PushNotificationManager />
                                                 <Outlet />
                                             </div>
                                             <BottomNav />

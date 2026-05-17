@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Page from "../../components/common/Page";
 import { useWebSocket } from "../../context/WebsocketContext";
-import { usePushNotifications } from "../../hooks/usePushNotifications";
 import BlockageStatusCard from "./components/BlockageStatusCard";
 import ConnectionStatusBanner from "./components/ConnectionStatusBanner";
 import FusionAnalysisCard from "./components/FusionAnalysisCard";
@@ -20,7 +19,6 @@ function getTimeSinceUpdate(date: Date | null): string {
 }
 
 export default function Home() {
-    const { pushError } = usePushNotifications();
     const { connectionStatus, lastMessageAt } = useWebSocket();
 
     const [timeAgo, setTimeAgo] = useState("");
@@ -38,11 +36,6 @@ export default function Home() {
     return (
         <Page>
             <ConnectionStatusBanner status={connectionStatus} />
-            {pushError && (
-                <div className="mx-4 mt-2 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg text-sm text-amber-700 dark:text-amber-300">
-                    {pushError}
-                </div>
-            )}
             <div className="flex items-center justify-between px-5 mb-2">
                 {lastMessageAt && (
                     <span
