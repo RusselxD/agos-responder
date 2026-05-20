@@ -64,6 +64,15 @@ const fil: Record<TranslationKey, string> = {
     "profile.activated": "Na-activate",
     "profile.assignedSite": "Itinalagang Lugar",
     "profile.logout": "Mag-logout",
+    "profile.editName": "Baguhin ang pangalan",
+    "profile.firstName": "Pangalan",
+    "profile.lastName": "Apelyido",
+    "profile.save": "I-save",
+    "profile.cancel": "Kanselahin",
+    "profile.saving": "Sini-save...",
+    "profile.phoneAdminOnly": "Makipag-ugnayan sa admin para baguhin ang numero ng telepono.",
+    "profile.updateFailed": "Hindi nagawa. Pakisubukan muli.",
+    "profile.nameRequired": "Kinakailangan ang pangalan at apelyido.",
     "profile.prefError": "Hindi ma-load ang mga notification preference",
 
     // Verify page

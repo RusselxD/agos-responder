@@ -61,6 +61,15 @@ const en = {
     "profile.activated": "Activated",
     "profile.assignedSite": "Assigned Site",
     "profile.logout": "Logout",
+    "profile.editName": "Edit name",
+    "profile.firstName": "First name",
+    "profile.lastName": "Last name",
+    "profile.save": "Save",
+    "profile.cancel": "Cancel",
+    "profile.saving": "Saving...",
+    "profile.phoneAdminOnly": "Contact an admin to change your phone number.",
+    "profile.updateFailed": "Failed to update. Please try again.",
+    "profile.nameRequired": "First and last name are required.",
     "profile.prefError": "Failed to fetch notification preferences",
 
     // Verify page

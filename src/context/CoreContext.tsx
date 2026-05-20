@@ -17,6 +17,7 @@ interface CoreContextValue {
     responder: Responder | null;
     isLoading: boolean;
     logOut: () => void;
+    setResponder: (responder: Responder) => void;
 }
 
 const CoreContext = createContext<CoreContextValue | undefined>(undefined);
@@ -65,6 +66,7 @@ export function CoreProvider({ children }: { children: ReactNode }) {
             responder,
             isLoading,
             logOut,
+            setResponder,
         }),
         [responderId, responder, isLoading, logOut],
     );

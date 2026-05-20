@@ -24,6 +24,17 @@ export const responderAPI = {
         }
     },
 
+    updateResponderProfile: async (
+        responderId: string,
+        payload: { firstName?: string; lastName?: string },
+    ): Promise<Responder> => {
+        const res = await apiClient.patch(
+            `/responder/${responderId}/profile`,
+            payload,
+        );
+        return res.data as Responder;
+    },
+
     updateResponderNotifPreferences: async (
         responderId: string,
         key: keyof NotificationPreferences,
