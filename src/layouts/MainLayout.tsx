@@ -36,7 +36,7 @@ export default function MainLayout() {
                                     <NotificationProvider>
                                         <div>
                                             <AppHeader />
-                                            <div className="min-h-[100dvh] bg-background dark:bg-background-dark pt-14 pb-16">
+                                            <div className="min-h-[100dvh] bg-background dark:bg-background-dark pt-14 pb-[calc(5rem+env(safe-area-inset-bottom))]">
                                                 <PushNotificationManager />
                                                 <Outlet />
                                             </div>
