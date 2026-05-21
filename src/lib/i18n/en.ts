@@ -70,6 +70,25 @@ const en = {
     "profile.phoneAdminOnly": "Contact an admin to change your phone number.",
     "profile.updateFailed": "Failed to update. Please try again.",
     "profile.nameRequired": "First and last name are required.",
+
+    // Push permission gate
+    "push.title": "Notifications Required",
+    "push.subtitle": "AGOS sends critical flood and blockage alerts via push notifications. You must enable them to use this app.",
+    "push.retryTitle": "Setup didn't complete",
+    "push.retrySubtitle": "Your permission is granted, but we couldn't finish subscribing this device to alerts.",
+    "push.enableButton": "Enable Notifications",
+    "push.enabling": "Enabling...",
+    "push.recheckButton": "I've enabled it — recheck",
+    "push.retryButton": "Retry",
+    "push.deniedTitle": "Notifications are blocked",
+    "push.deniedBody": "You previously denied notifications. Your browser will not ask again — you need to enable them in settings.",
+    "push.iosSteps": "On iPhone: open Settings → Notifications → AGOS → turn on Allow Notifications.",
+    "push.androidSteps": "Tap the lock or info icon in your browser's address bar → Permissions → Notifications → Allow. Then return here and tap Recheck.",
+    "push.unsupportedTitle": "Device not supported",
+    "push.unsupportedBody": "This device or browser does not support push notifications. AGOS cannot deliver alerts here.",
+    "push.errorVapid": "Could not load notification settings. Try again in a moment.",
+    "push.errorSubscribe": "Something went wrong while setting up notifications. Please retry.",
+    "push.logoutButton": "Log out",
     "profile.prefError": "Failed to fetch notification preferences",
 
     // Verify page
