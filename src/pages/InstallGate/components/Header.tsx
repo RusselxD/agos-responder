@@ -4,7 +4,7 @@ export default function Header() {
             <img src="/agos.svg" className="w-20 mb-8" />
 
             <p className="font-bold text-3xl">Install AGOS to Continue</p>
-            <p className="font-medium mt-2 text-gray-700 dark:text-gray-300">
+            <p className="font-medium mt-2 text-gray-700 dark:text-gray-500">
                 AGOS must be installed on your home screen to receive push
                 notifications.
             </p>
