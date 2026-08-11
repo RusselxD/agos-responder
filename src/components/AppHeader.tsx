@@ -24,7 +24,7 @@ export default function AppHeader() {
         <div className="fixed z-50 top-0 left-0 right-0 flex items-center justify-between bg-white dark:bg-slate-900 custom-shadow pb-4 pt-[max(1.25rem,env(safe-area-inset-top))] px-4">
             <div className="flex items-center gap-1">
                 <img src="/agos.svg" className="w-8" />
-                <p className="font-black text-xl text-primary dark:text-accent">AGOS</p>
+                <p className="font-black text-xl text-primary dark:text-accent">Patrol</p>
             </div>
             <div className="flex items-center gap-1">
                 <MapPinFilled className="text-red-500" />

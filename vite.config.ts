@@ -18,8 +18,8 @@ export default defineConfig({
                 maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3 MiB
             },
             manifest: {
-                name: "AGOS",
-                short_name: "AGOS",
+                name: "AGOS Patrol",
+                short_name: "Patrol",
                 display: "standalone",
                 scope: "/",
                 start_url: "/",
