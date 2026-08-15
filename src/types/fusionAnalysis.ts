@@ -34,6 +34,12 @@ interface StatusBase {
 
 interface BlockageStatus extends StatusBase {
     status: string;
+    confidence?: {
+        tier: "clear" | "possible" | "likely" | "confirmed";
+        score: number;
+        window_size: number;
+        flagged_in_window: number;
+    } | null;
 }
 
 interface WaterLevelStatus extends StatusBase {

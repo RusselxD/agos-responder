@@ -151,12 +151,18 @@ export const AcknowledgementDetails = ({
 };
 
 export const AlertTypeBadge = ({ type }: { type: NotificationType }) => {
+    const { t } = useI18n();
+    const label =
+        type === "blockage"
+            ? t("alerts.surfaceObstruction")
+            : type.toUpperCase();
+
     return (
         <div
             className={`${getBadgeColor(type)} border w-fit px-4 py-1.5 flex items-center gap-1 text-xs font-medium rounded-full`}
         >
             {getIcon(type)}
-            <span>{type.toUpperCase()}</span>
+            <span>{label}</span>
         </div>
     );
 };

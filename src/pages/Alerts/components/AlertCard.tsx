@@ -11,12 +11,18 @@ import { useAlertsPageHook } from "../context/AlertsPageContext.tsx";
 import { useI18n } from "../../../context/I18nContext";
 
 const AlertTypeBadge = ({ type }: { type: NotificationType }) => {
+    const { t } = useI18n();
+    const label =
+        type === "blockage"
+            ? t("alerts.surfaceObstruction")
+            : type.toUpperCase();
+
     return (
         <div
             className={`${getBadgeColor(type)} w-fit px-2 py-1 flex items-center gap-1 text-xs font-medium rounded-md`}
         >
             {getIcon(type)}
-            <span>{type.toUpperCase()}</span>
+            <span>{label}</span>
         </div>
     );
 };
