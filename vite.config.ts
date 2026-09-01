@@ -24,8 +24,8 @@ export default defineConfig({
                 scope: "/",
                 start_url: "/",
                 id: "/",
-                background_color: "#ffffff",
-                theme_color: "#ffffff",
+                background_color: "#F8F8F8",
+                theme_color: "#0A3D62",
                 icons: [
                     {
                         src: "/agos.png",
