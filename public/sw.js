@@ -22,16 +22,16 @@ const vibrationPatterns = {
 
 // Push notification handlers
 self.addEventListener("push", (event) => {
-    const data = event.data?.json() ?? { title: "AGOS", message: "" };
+    const data = event.data?.json() ?? { title: "Patrol", message: "" };
     const type = data.type || "announcement";
     const vibrate = vibrationPatterns[type] || vibrationPatterns.announcement;
 
     event.waitUntil(
         Promise.all([
-            self.registration.showNotification(data.title, {
+            self.registration.showNotification(data.title || "Patrol", {
                 body: data.message,
-                icon: "/agos.png",
-                badge: "/agos.png",
+                icon: "/patrol.png",
+                badge: "/patrol.png",
                 vibrate,
                 tag: type,
                 data: { url: data.url ?? "/", type },

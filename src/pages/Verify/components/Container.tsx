@@ -16,7 +16,7 @@ export default function Container({
             <div className="h-1.5 bg-primary dark:bg-accent absolute top-0 left-0 right-0"></div>
 
             <div className="flex flex-col items-center">
-                <img src="/agos.svg" className="w-12 " />
+                <img src="/patrol.svg" className="w-12" alt="Patrol" />
                 <h2 className="text-[1.600rem] font-bold mt-4 dark:text-white">
                     {headerTitle}
                 </h2>

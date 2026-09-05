@@ -7,7 +7,7 @@ export default function InstallGate() {
     const platform = detectPlatform();
 
     return (
-        <div className="pt-14 px-2">
+        <div className="min-h-[100dvh] bg-background dark:bg-background-dark px-4 pt-[max(3.5rem,env(safe-area-inset-top))] pb-[max(1.5rem,env(safe-area-inset-bottom))]">
             <Header />
             <div className="mt-5">
                 {platform === "android" && <AndroidInstall />}

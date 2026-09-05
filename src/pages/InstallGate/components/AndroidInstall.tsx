@@ -128,7 +128,7 @@ export default function AndroidInstall() {
             <div className="space-y-3">
                 <div className="flex items-center gap-2 text-green-600 font-medium">
                     <Check className="w-5 h-5 shrink-0" />
-                    AGOS is installed
+                    Patrol is installed
                 </div>
                 <button
                     onClick={handleContinue}
@@ -149,7 +149,7 @@ export default function AndroidInstall() {
             >
                 {installState === "installing"
                     ? "Opening install prompt..."
-                    : "Install AGOS"}
+                    : "Install Patrol"}
             </button>
 
             {installState === "error" && errorMessage && (

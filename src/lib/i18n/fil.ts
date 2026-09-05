@@ -83,7 +83,7 @@ const fil: Record<TranslationKey, string> = {
 
     // Push permission gate
     "push.title": "Kailangan ang Mga Notipikasyon",
-    "push.subtitle": "Ipinapadala ng AGOS ang mga kritikal na alerto sa baha at posibleng sagabal sa ibabaw sa pamamagitan ng push notifications. Kailangan mo itong i-enable para magamit ang app.",
+    "push.subtitle": "Ipinapadala ng Patrol ang mga kritikal na alerto sa baha at posibleng sagabal sa ibabaw sa pamamagitan ng push notifications. Kailangan mo itong i-enable para magamit ang app.",
     "push.retryTitle": "Hindi natapos ang setup",
     "push.retrySubtitle": "Pinayagan mo na ang permission, pero hindi natapos ang pag-subscribe ng device na ito sa mga alerto.",
     "push.enableButton": "I-enable ang Mga Notipikasyon",
@@ -92,10 +92,10 @@ const fil: Record<TranslationKey, string> = {
     "push.retryButton": "Subukan muli",
     "push.deniedTitle": "Naka-disable ang mga notipikasyon",
     "push.deniedBody": "Tinanggihan mo dati ang mga notipikasyon. Hindi na ito itatanong muli ng browser — kailangan mong i-enable sa settings.",
-    "push.iosSteps": "Sa iPhone: buksan ang Settings → Notifications → AGOS → i-on ang Allow Notifications.",
+    "push.iosSteps": "Sa iPhone: buksan ang Settings → Notifications → Patrol → i-on ang Allow Notifications.",
     "push.androidSteps": "Tapikin ang lock o info icon sa address bar ng browser → Permissions → Notifications → Allow. Pagkatapos, balik dito at tapikin ang Recheck.",
     "push.unsupportedTitle": "Hindi suportado ang device",
-    "push.unsupportedBody": "Hindi sinusuportahan ng device o browser na ito ang push notifications. Hindi makapagpapadala ng alerto ang AGOS dito.",
+    "push.unsupportedBody": "Hindi sinusuportahan ng device o browser na ito ang push notifications. Hindi makapagpapadala ng alerto ang Patrol dito.",
     "push.errorVapid": "Hindi ma-load ang notification settings. Subukan muli sa ilang sandali.",
     "push.errorSubscribe": "May nangyaring mali sa pag-setup ng notipikasyon. Subukan muli.",
     "push.logoutButton": "Mag-logout",

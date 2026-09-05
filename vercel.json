@@ -21,7 +21,7 @@
     ],
     "rewrites": [
         {
-            "source": "/((?!assets/|sw\\.js|registerSW\\.js|manifest\\.webmanifest|agos\\.png|vite\\.svg|index\\.html).*)",
+            "source": "/((?!assets/|sw\\.js|registerSW\\.js|manifest\\.webmanifest|patrol\\.png|patrol\\.svg|index\\.html).*)",
             "destination": "/index.html"
         }
     ]

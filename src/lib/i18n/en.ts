@@ -80,7 +80,7 @@ const en = {
 
     // Push permission gate
     "push.title": "Notifications Required",
-    "push.subtitle": "AGOS sends critical flood and potential surface-obstruction alerts via push notifications. You must enable them to use this app.",
+    "push.subtitle": "Patrol sends critical flood and potential surface-obstruction alerts via push notifications. You must enable them to use this app.",
     "push.retryTitle": "Setup didn't complete",
     "push.retrySubtitle": "Your permission is granted, but we couldn't finish subscribing this device to alerts.",
     "push.enableButton": "Enable Notifications",
@@ -89,10 +89,10 @@ const en = {
     "push.retryButton": "Retry",
     "push.deniedTitle": "Notifications are disabled",
     "push.deniedBody": "You previously denied notifications. Your browser will not ask again — you need to enable them in settings.",
-    "push.iosSteps": "On iPhone: open Settings → Notifications → AGOS → turn on Allow Notifications.",
+    "push.iosSteps": "On iPhone: open Settings → Notifications → Patrol → turn on Allow Notifications.",
     "push.androidSteps": "Tap the lock or info icon in your browser's address bar → Permissions → Notifications → Allow. Then return here and tap Recheck.",
     "push.unsupportedTitle": "Device not supported",
-    "push.unsupportedBody": "This device or browser does not support push notifications. AGOS cannot deliver alerts here.",
+    "push.unsupportedBody": "This device or browser does not support push notifications. Patrol cannot deliver alerts here.",
     "push.errorVapid": "Could not load notification settings. Try again in a moment.",
     "push.errorSubscribe": "Something went wrong while setting up notifications. Please retry.",
     "push.logoutButton": "Log out",

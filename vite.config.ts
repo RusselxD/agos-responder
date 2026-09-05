@@ -18,7 +18,7 @@ export default defineConfig({
                 maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3 MiB
             },
             manifest: {
-                name: "AGOS Patrol",
+                name: "Patrol",
                 short_name: "Patrol",
                 display: "standalone",
                 scope: "/",
@@ -28,9 +28,10 @@ export default defineConfig({
                 theme_color: "#0A3D62",
                 icons: [
                     {
-                        src: "/agos.png",
+                        src: "/patrol.png",
                         sizes: "1000x1000",
                         type: "image/png",
+                        purpose: "any maskable",
                     },
                 ],
             },
