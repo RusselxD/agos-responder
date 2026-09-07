@@ -16,7 +16,7 @@ function CoreGate({ children }: { children: React.ReactNode }) {
   if (isLoading) {
     return (
       <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-white dark:bg-slate-900">
-        <img src="/patrol.png" className="w-32" alt="Patrol" />
+        <img src="/patrol.svg" className="w-32" alt="Patrol" />
       </div>
     );
   }

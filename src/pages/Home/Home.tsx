@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import Page from "../../components/common/Page";
 import { useWebSocket } from "../../context/WebsocketContext";
-import { useI18n } from "../../context/I18nContext";
-import HomeOverview from "./components/HomeOverview";
 import BlockageStatusCard from "./components/BlockageStatusCard";
 import ConnectionStatusBanner from "./components/ConnectionStatusBanner";
 import FusionAnalysisCard from "./components/FusionAnalysisCard";
@@ -22,7 +20,6 @@ function getTimeSinceUpdate(date: Date | null): string {
 
 export default function Home() {
   const { connectionStatus, lastMessageAt } = useWebSocket();
-  const { t } = useI18n();
 
   const [timeAgo, setTimeAgo] = useState("");
   const [isStale, setIsStale] = useState(false);
@@ -41,7 +38,7 @@ export default function Home() {
   }, [lastMessageAt]);
 
   return (
-    <Page className="!space-y-5 bg-background-dark">
+    <Page className="!space-y-4">
       <ConnectionStatusBanner status={connectionStatus} />
       <div className="flex items-center justify-between px-5 mb-2">
         {lastMessageAt && (
@@ -52,15 +49,11 @@ export default function Home() {
           </span>
         )}
       </div>
-      <HomeOverview />
-      <div className="space-y-3 border-t border-slate-700/80 pt-5">
-        <h2 className="px-1 text-lg font-semibold text-white">{t("home.detailedReadings")}</h2>
-        <FusionAnalysisCard />
-        <BlockageStatusCard />
-        <WaterLevelStatusCard />
-        <WaterLevelSparkline />
-        <WeatherConditionCard />
-      </div>
+      <FusionAnalysisCard />
+      <BlockageStatusCard />
+      <WaterLevelStatusCard />
+      <WaterLevelSparkline />
+      <WeatherConditionCard />
     </Page>
   );
 }

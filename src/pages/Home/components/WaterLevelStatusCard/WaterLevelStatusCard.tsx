@@ -19,8 +19,8 @@ export default function WaterLevelStatusCard() {
     }
 
     return (
-        <Card headerTitle={t("home.waterLevelStatus")} className="!p-3">
-            <div className="flex h-full justify-between">
+        <Card headerTitle={t("home.waterLevelStatus")} className="!rounded-2xl !border !border-slate-600/80 !bg-slate-800/90 !p-4">
+            <div className="grid grid-cols-[minmax(9rem,1fr)_minmax(0,1.35fr)] gap-3">
                 <MainDisplay />
                 <MetricCards />
             </div>

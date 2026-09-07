@@ -88,7 +88,7 @@ export default function WeatherConditionCard() {
     }
 
     return (
-        <Card headerTitle={t("home.weatherCondition")} className="!p-3">
+        <Card headerTitle={t("home.weatherCondition")} className="!rounded-2xl !border !border-slate-600/80 !bg-slate-800/90 !p-4">
             <WeatherCondition weather={weatherData} />
             <div className="grid grid-cols-2 gap-2">
                 <PrecipitationInfo

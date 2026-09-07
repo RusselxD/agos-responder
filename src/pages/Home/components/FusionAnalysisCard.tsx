@@ -107,12 +107,14 @@ export default function FusionAnalysisCard() {
 
     return (
         <Card
-            className={`${tier.bgColor} ${tier.borderColor} border-l-4 !pb-8 !py-3 !pl-3 relative`}
+            className={`${tier.bgColor} ${tier.borderColor} border !rounded-2xl !px-5 !py-6 relative`}
         >
-            <div className="flex gap-3">
-                <tier.icon className={`w-8 h-8 ${tier.color}`} />
+            <div className="flex flex-col items-center gap-3 text-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-slate-950/60 ring-1 ring-white/5">
+                    <tier.icon className={`h-9 w-9 ${tier.color}`} />
+                </div>
                 <div className="space-y-1">
-                    <span className={`font-semibold ${tier.color}`}>
+                    <span className={`block text-3xl font-bold ${tier.color}`}>
                         {fusionAnalysis?.fusion_data.alert_name || "N/A"}
                     </span>
 

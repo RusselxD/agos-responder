@@ -141,7 +141,7 @@ export default function BlockageStatusCard() {
     }
 
     return (
-        <Card className="bg-white !p-3" headerTitle={t("home.blockageStatus")}>
+        <Card className="!rounded-2xl !border !border-slate-600/80 !bg-slate-800/90 !p-4" headerTitle={t("home.blockageStatus")}>
             <div>
                 <div className="flex flex-wrap items-center justify-between gap-2">
                     <StatusText />
