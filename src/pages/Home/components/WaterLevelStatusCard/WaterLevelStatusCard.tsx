@@ -7,26 +7,23 @@ import MetricCards from "./components/MetricCards";
 import "./style.css";
 
 export default function WaterLevelStatusCard() {
-  const { isFetching, sensorData, error } = useWaterLevel();
-  const { t } = useI18n();
+    const { isFetching, sensorData, error } = useWaterLevel();
+    const { t } = useI18n();
 
-  if (isFetching && !sensorData) {
-    return <div className="skeleton h-48 w-full rounded-xl" />;
-  }
+    if (isFetching && !sensorData) {
+        return <div className="skeleton h-48 w-full rounded-xl" />;
+    }
 
-  if (error) {
-    return <ErrorCard message={error} />;
-  }
+    if (error) {
+        return <ErrorCard message={error} />;
+    }
 
-  return (
-    <Card
-      headerTitle={t("home.waterLevelStatus")}
-      className="!rounded-2xl !border !border-slate-600/80 !bg-slate-800/90 !p-4"
-    >
-      <div className="grid grid-cols-[minmax(9rem,1fr)_minmax(0,1.35fr)] gap-3">
-        <MainDisplay />
-        <MetricCards />
-      </div>
-    </Card>
-  );
+    return (
+        <Card headerTitle={t("home.waterLevelStatus")} className="!p-3">
+            <div className="flex h-full justify-between">
+                <MainDisplay />
+                <MetricCards />
+            </div>
+        </Card>
+    );
 }
