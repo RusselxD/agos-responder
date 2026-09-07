@@ -29,7 +29,7 @@ export default function IosInstall() {
 
     return (
         <div className="space-y-5">
-            <p className="text-sm text-gray-600 dark:text-gray-500 text-center">
+            <p className="text-sm text-gray-600 dark:text-slate-300 text-center">
                 Follow these steps to install Patrol on your iPhone:
             </p>
 
@@ -89,7 +89,7 @@ function Step({
             <div className="flex-1">
                 <div className="flex items-center gap-2">
                     {icon}
-                    <span className="font-semibold text-gray-900 dark:text-gray-500 text-sm">
+                    <span className="font-semibold text-gray-900 dark:text-white text-sm">
                         {title}
                     </span>
                 </div>
