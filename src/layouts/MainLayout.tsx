@@ -11,44 +11,44 @@ import { WeatherProvider } from "../context/WeatherContext";
 import { NotificationProvider } from "../context/NotificationContext";
 
 function CoreGate({ children }: { children: React.ReactNode }) {
-    const { isLoading } = useCoreHook();
+  const { isLoading } = useCoreHook();
 
-    if (isLoading) {
-        return (
-            <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-white dark:bg-slate-900">
-                <img src="/patrol.png" className="w-32" alt="Patrol" />
-            </div>
-        );
-    }
+  if (isLoading) {
+    return (
+      <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-white dark:bg-slate-900">
+        <img src="/patrol.png" className="w-32" alt="Patrol" />
+      </div>
+    );
+  }
 
-    return <>{children}</>;
+  return <>{children}</>;
 }
 
 export default function MainLayout() {
-    return (
-        <CoreProvider>
-            <CoreGate>
-                <WebSocketProvider>
-                    <FusionAnalysisProvider>
-                        <BlockageProvider>
-                            <WaterLevelProvider>
-                                <WeatherProvider>
-                                    <NotificationProvider>
-                                        <div>
-                                            <AppHeader />
-                                            <div className="min-h-[100dvh] bg-background dark:bg-background-dark pt-14 pb-[calc(5rem+env(safe-area-inset-bottom))]">
-                                                <PushNotificationManager />
-                                                <Outlet />
-                                            </div>
-                                            <BottomNav />
-                                        </div>
-                                    </NotificationProvider>
-                                </WeatherProvider>
-                            </WaterLevelProvider>
-                        </BlockageProvider>
-                    </FusionAnalysisProvider>
-                </WebSocketProvider>
-            </CoreGate>
-        </CoreProvider>
-    );
+  return (
+    <CoreProvider>
+      <CoreGate>
+        <WebSocketProvider>
+          <FusionAnalysisProvider>
+            <BlockageProvider>
+              <WaterLevelProvider>
+                <WeatherProvider>
+                  <NotificationProvider>
+                    <div>
+                      <AppHeader />
+                      <div className="min-h-[100dvh] bg-background dark:bg-background-dark pt-[calc(3rem+max(1.25rem,env(safe-area-inset-top)))] pb-[calc(5rem+env(safe-area-inset-bottom))]">
+                        <PushNotificationManager />
+                        <Outlet />
+                      </div>
+                      <BottomNav />
+                    </div>
+                  </NotificationProvider>
+                </WeatherProvider>
+              </WaterLevelProvider>
+            </BlockageProvider>
+          </FusionAnalysisProvider>
+        </WebSocketProvider>
+      </CoreGate>
+    </CoreProvider>
+  );
 }
