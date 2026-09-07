@@ -36,7 +36,7 @@ const PrecipitationInfo = ({
         <div
             className={`rounded-lg p-2.5 border ${warning ? "bg-amber-100 border-amber-300 dark:bg-amber-950/50 dark:border-amber-700" : "bg-slate-100 border-gray-300 dark:bg-slate-700 dark:border-slate-600"}`}
         >
-            <p className="text-sm text-gray-500 dark:text-gray-400">{t("home.precipitation")}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-200">{t("home.precipitation")}</p>
             <p className="text-sm ">
                 <span>{`${precipitation_mm.toFixed(1)} mm/h`}</span>
             </p>
@@ -65,7 +65,7 @@ const LastUpdatedInfo = ({ timestamp }: { timestamp: string }) => {
         <div
             className={`rounded-lg p-2.5 border ${warning ? "bg-amber-100 border-amber-300 dark:bg-amber-950/50 dark:border-amber-700" : "bg-slate-100 border-gray-300 dark:bg-slate-700 dark:border-slate-600"}`}
         >
-            <p className="text-sm text-gray-500 dark:text-gray-400">{t("home.lastUpdated")}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-200">{t("home.lastUpdated")}</p>
             <p className="text-sm">{timeAgo}</p>
         </div>
     );
