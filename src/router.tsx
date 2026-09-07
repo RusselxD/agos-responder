@@ -15,66 +15,74 @@ import Alerts from "./pages/Alerts";
 import { AlertsPageProvider } from "./pages/Alerts/context/AlertsPageContext";
 
 export const router = createBrowserRouter([
-    {
-        path: "/",
+  {
+    path: "/",
+    element: (
+      <InstalledGuard>
+        <AuthGuard>
+          <MainLayout />
+        </AuthGuard>
+      </InstalledGuard>
+    ),
+    children: [
+      {
+        index: true,
+        element: <Navigate to="/home" replace />,
+      },
+      {
+        path: "/home",
         element: (
-            <InstalledGuard>
-                <AuthGuard>
-                    <MainLayout />
-                </AuthGuard>
-            </InstalledGuard>
+          <ErrorBoundary>
+            <Home />
+          </ErrorBoundary>
         ),
-        children: [
-            {
-                index: true,
-                element: <Navigate to="/home" replace />,
-            },
-            {
-                path: "/home",
-                element: <ErrorBoundary><Home /></ErrorBoundary>,
-            },
-            {
-                path: "/alerts",
-                element: (
-                    <ErrorBoundary>
-                        <AlertsPageProvider>
-                            <Alerts />
-                        </AlertsPageProvider>
-                    </ErrorBoundary>
-                ),
-            },
-            {
-                path: "/me",
-                element: <ErrorBoundary><Profile /></ErrorBoundary>,
-            },
-        ],
-    },
-    {
-        path: "/install",
-        element: <InstallGate />,
-    },
-    {
-        path: "/verify",
+      },
+      {
+        path: "/alerts",
         element: (
-            <InstalledGuard>
-                <VerifyPageProvider>
-                    <VerifyLayout />
-                </VerifyPageProvider>
-            </InstalledGuard>
+          <ErrorBoundary>
+            <AlertsPageProvider>
+              <Alerts />
+            </AlertsPageProvider>
+          </ErrorBoundary>
         ),
-        children: [
-            {
-                index: true,
-                element: <Navigate to="phone-lookup" replace />,
-            },
-            {
-                path: "phone-lookup",
-                element: <PhoneLookup />,
-            },
-            {
-                path: "otp-verification",
-                element: <OTPVerification />,
-            },
-        ],
-    },
+      },
+      {
+        path: "/me",
+        element: (
+          <ErrorBoundary>
+            <Profile />
+          </ErrorBoundary>
+        ),
+      },
+    ],
+  },
+  {
+    path: "/install",
+    element: <InstallGate />,
+  },
+  {
+    path: "/verify",
+    element: (
+      <InstalledGuard>
+        <VerifyPageProvider>
+          <VerifyLayout />
+        </VerifyPageProvider>
+      </InstalledGuard>
+    ),
+    children: [
+      {
+        index: true,
+        element: <Navigate to="phone-lookup" replace />,
+      },
+      {
+        path: "phone-lookup",
+        element: <PhoneLookup />,
+      },
+      {
+        path: "otp-verification",
+        element: <OTPVerification />,
+      },
+    ],
+  },
 ]);
